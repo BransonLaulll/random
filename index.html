@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Random Number Generator</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			margin: 0;
+			padding: 0;
+		}
+
+		h1 {
+			margin-top: 50px;
+		}
+
+		p {
+			margin: 20px 0;
+		}
+
+		button {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		button:hover {
+			background-color: #3E8E41;
+		}
+
+		#result {
+			font-size: 24px;
+			margin-top: 50px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Random Number Generator</h1>
+	<p>Choose between IASM and CPRS:</p>
+	<button onclick="generateNumber()">Generate Number</button>
+	<p id="result"></p>
+
+	<script>
+		function generateNumber() {
+			// Array with the options
+			var options = ["IASM", "CPRS"];
+
+			// Generate a random index to choose an option from the array
+			var randomIndex = Math.floor(Math.random() * options.length);
+
+			// Get the chosen option
+			var chosenOption = options[randomIndex];
+
+			// Generate a random number based on the chosen option
+			var randomNumber;
+			if (chosenOption === "IASM") {
+				randomNumber = Math.floor(Math.random() * 83) + 1;
+			} else {
+				randomNumber = Math.floor(Math.random() * 93) + 1;
+			}
+
+			// Display the result
+			var result = document.getElementById("result");
+			result.innerHTML = "<strong>Chosen option:</strong> " + chosenOption + "<br><strong>Random number:</strong> " + randomNumber;
+		}
+	</script>
+</body>
+</html>
