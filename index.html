@@ -46,16 +46,12 @@
 
 	<script>
 		function generateNumber() {
-			// Array with the options
 			var options = ["IASM", "CPRS"];
 
-			// Generate a random index to choose an option from the array
 			var randomIndex = Math.floor(Math.random() * options.length);
 
-			// Get the chosen option
 			var chosenOption = options[randomIndex];
 
-			// Generate a random number based on the chosen option
 			var randomNumber;
 			if (chosenOption === "IASM") {
 				randomNumber = Math.floor(Math.random() * 83) + 1;
@@ -63,7 +59,6 @@
 				randomNumber = Math.floor(Math.random() * 93) + 1;
 			}
 
-			// Display the result
 			var result = document.getElementById("result");
 			result.innerHTML = "<strong>Chosen option:</strong> " + chosenOption + "<br><strong>Random number:</strong> " + randomNumber;
 		}
