@@ -51,7 +51,7 @@
 	  <table>
     <tr>
       <th>Module</th>
-      <th>Tick box</th>
+      <th></th>
     </tr>
     <tr>
       <td><label for="iasm">IASM</label></td>
@@ -105,27 +105,27 @@
 
 			var randomIndex = Math.floor(Math.random() * options.length);
 
-			var chosenOption = options[randomIndex];
+			var Module = options[randomIndex];
 
 			var randomNumber;
-			if (chosenOption === "IASM") {
+			if (Module === "IASM") {
 				randomNumber = Math.floor(Math.random() * 83) + 1;
-			} else if (chosenOption === "CPRS") {
+			} else if (Module === "CPRS") {
 				randomNumber = Math.floor(Math.random() * 93) + 1;
-			} else if (chosenOption === "GIS") {
+			} else if (Module === "GIS") {
 				randomNumber = Math.floor(Math.random() * 31) + 1;
-			} else if (chosenOption === "MSS") {
+			} else if (Module === "MSS") {
 				randomNumber = Math.floor(Math.random() * 33) + 1;
-			} else if (chosenOption === "HNNS") {
+			} else if (Module === "HNNS") {
 				randomNumber = Math.floor(Math.random() * 52) + 1;
-			} else if (chosenOption === "HIS") {
+			} else if (Module === "HIS") {
 				randomNumber = Math.floor(Math.random() * 33) + 1;
 			} else {
 				randomNumber = Math.floor(Math.random() * 46) + 1;
 			}
 
 			var result = document.getElementById("result");
-			result.innerHTML = "<strong>Chosen option:</strong> " + chosenOption + "<br><strong>Random number:</strong> " + randomNumber;
+			result.innerHTML = "<strong>Module:</strong> " + Module + "<br><strong>Random number:</strong> " + randomNumber;
 		}
 	</script>
 </body>
