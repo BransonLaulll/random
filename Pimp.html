@@ -1,362 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Random Surgery Lecture Generator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-      margin: 0;
-      background-color: #f9f9f9;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    h1 {
-      margin-top: 20px;
-      font-size: 28px;
-      color: #333;
-    }
+	<title>Random Number Generator</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			margin: 0;
+			padding: 0;
+		}
 
-    .instruction {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 15px;
-    }
+		h1 {
+			margin-top: 50px;
+		}
 
-    .control-buttons {
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
+		p {
+			margin: 20px 0;
+		}
 
-    .control-buttons button {
-      padding: 8px 20px;
-      font-size: 14px;
-      background-color: #546e7a;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+		button {
+			padding: 10px 20px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
 
-    .control-buttons button:hover {
-      background-color: #37474f;
-    }
+		button:hover {
+			background-color: #3E8E41;
+		}
 
-    .checkbox-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
+		#result {
+			font-size: 24px;
+			margin-top: 50px;
+		}
 
-    .checkbox-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 200px);
-      gap: 15px;
-      padding: 20px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .checkbox-item {
-      text-align: left;
-      display: flex;
-      align-items: center;
-    }
-
-    .checkbox-item label {
-      font-size: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      width: 100%;
-    }
-
-    .checkbox-item label:hover {
-      color: #00796b;
-    }
-
-    input[type="checkbox"] {
-      margin-right: 8px;
-      cursor: pointer;
-      width: 16px;
-      height: 16px;
-    }
-
-    .generate-button {
-      margin-top: 30px;
-      padding: 12px 35px;
-      font-size: 18px;
-      background-color: #00796b;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .generate-button:hover {
-      background-color: #004d40;
-    }
-
-    .generate-button:active {
-      transform: scale(0.98);
-    }
-
-    #result {
-      margin-top: 30px;
-      padding: 25px;
-      min-height: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .lecture-code {
-      font-size: 32px;
-      font-weight: bold;
-      color: #00796b;
-      margin-bottom: 15px;
-      padding: 10px 20px;
-      background-color: #e0f7fa;
-      border-radius: 10px;
-      display: inline-block;
-    }
-
-    .lecture-title {
-      font-size: 20px;
-      color: #333;
-      max-width: 800px;
-      line-height: 1.5;
-      padding: 15px;
-      background-color: #fff;
-      border-left: 4px solid #00796b;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-
-    .no-result {
-      color: #999;
-      font-style: italic;
-      font-size: 18px;
-    }
-
-    @media (max-width: 768px) {
-      .checkbox-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .lecture-title {
-        font-size: 18px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .checkbox-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .lecture-code {
-        font-size: 28px;
-      }
-    }
-  </style>
+		label {
+			font-size: 20px;
+		}
+	</style>
 </head>
 <body>
+	<h1>Random Number Generator</h1>
+	<p>HKU Year 2 MBBS</p>
+<div style="display: flex; justify-content: center;">
+	  <table>
+    <tr>
+      <th>Module</th>
+      <th></th>
+    </tr>
+    <tr>
+      <td><label for="iasm">IASM</label></td>
+      <td><input type="checkbox" id="iasm" name="module" value="IASM"></td>
+    </tr>
+    <tr>
+      <td><label for="cprs">CPRS</label></td>
+      <td><input type="checkbox" id="cprs" name="module" value="CPRS"></td>
+    </tr>
+    <tr>
+      <td><label for="gis">GIS</label></td>
+      <td><input type="checkbox" id="gis" name="module" value="GIS"></td>
+    </tr>
+    <tr>
+      <td><label for="mss">MSS</label></td>
+      <td><input type="checkbox" id="mss" name="module" value="MSS"></td>
+    </tr>
+    <tr>
+      <td><label for="hnns">HNNS</label></td>
+      <td><input type="checkbox" id="hnns" name="module" value="HNNS"></td>
+    </tr>
+    <tr>
+      <td><label for="his">HIS</label></td>
+      <td><input type="checkbox" id="his" name="module" value="HIS"></td>
+    </tr>
+    <tr>
+      <td><label for="ers">ERS</label></td>
+      <td><input type="checkbox" id="ers" name="module" value="ERS"></td>
+    </tr>
+  </table>
+</div>
 
-  <h1>Random Surgery Lecture Generator</h1>
-  <p class="instruction">Select the blocks you want to quiz from:</p>
 
-  <div class="control-buttons">
-    <button onclick="selectAll()">Select All</button>
-    <button onclick="deselectAll()">Deselect All</button>
-  </div>
+	<button onclick="generateNumber()">Generate Number</button>
+	<p id="result"></p>
 
-  <div class="checkbox-container">
-    <div class="checkbox-grid">
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: NSG"> B: NSG</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Vascular"> B: Vascular</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Trauma"> B: Trauma</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: HBP"> B: HBP</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Endocrine"> B: Endocrine</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Plastic"> B: Plastic</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Lower GI"> B: Lower GI</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Urology"> B: Urology</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Breast"> B: Breast</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Upper GI"> B: Upper GI</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: ENT"> B: ENT</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: CTS"> B: CTS</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Ortho"> B: Ortho</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Ped"> B: Ped</label>
-      </div>
-    </div>
-  </div>
+	<script>
+		function generateNumber() {
+			var options = [];
+			var checkboxes = document.getElementsByName("module");
+			for (var i = 0; i < checkboxes.length; i++) {
+				if (checkboxes[i].checked) {
+					options.push(checkboxes[i].value);
+				}
+			}
 
-  <button class="generate-button" onclick="generateLecture()">Generate Lecture</button>
+			if (options.length === 0) {
+				alert("Please select at least one module.");
+				return;
+			}
 
-  <div id="result">
-    <div class="no-result">Select blocks and click Generate to see a random lecture</div>
-  </div>
+			var randomIndex = Math.floor(Math.random() * options.length);
 
-  <script>
-    const lectures = [
-      { code: "GC108", block: "B: NSG", title: "A mass in the brain: brain tumours" },
-      { code: "GC109", block: "B: NSG", title: "Headache and loss of consciousness: Acute stroke, subarachnoid haemorrhage and vascular malformation" },
-      { code: "GC110", block: "B: NSG", title: "Paraplegia: spinal cord compression; transverse myelitis; spinal dysraphism; neuroimaging III: spinal cord" },
-      { code: "GC111", block: "B: NSG", title: "Raised intracranial pressure and hydrocephalus" },
-      { code: "GC138", block: "B: Vascular", title: "My foot hurts: Foot problems" },
-      { code: "GC175", block: "B: Trauma", title: "A bus hit a train: Multiple trauma; Disaster management" },
-      { code: "GC176", block: "B: HBP", title: "A large liver: liver cancer" },
-      { code: "GC177", block: "B: Endocrine", title: "A thyroid nodule: benign thyroid nodules; thyroid cancer" },
-      { code: "GC178", block: "B: Plastic", title: "An ugly wound: Wound healing; Wound infection; Anti-septic technique" },
-      { code: "GC179", block: "B: Lower GI", title: "Anal pain: perianal lesions and sepsis" },
-      { code: "GC180", block: "B: Urology", title: "Benign prostatic hyperplasia, bladder outlet obstruction and urinary retention" },
-      { code: "GC181", block: "B: Breast", title: "Breast mass: breast cancer; benign breast diseases; mammography; breast cancer screening" },
-      { code: "GC182", block: "B: Trauma", title: "Chopped and stabbed wound in gang fight: Nerves and vascular injury; Classification of injuries" },
-      { code: "GC183", block: "B: Urology", title: "Common urologic malignancies and their presentations" },
-      { code: "GC184", block: "B: Urology", title: "Erection and erectile dysfunction" },
-      { code: "GC185", block: "B: Upper GI", title: "Feed him up before surgery: Surgical nutrition, Enteral and parenteral feeding" },
-      { code: "GC186", block: "B: Lower GI", title: "Fresh blood in stool: lower GI bleeding" },
-      { code: "GC187", block: "B: ENT", title: "Head and neck cancer problems: Function and shape" },
-      { code: "GC188", block: "A: Trauma", title: "Hit by a van, in shock with internal bleeding: Abdominal injury" },
-      { code: "GC189", block: "B: Upper GI", title: "I can't swallow: oesophageal cancer" },
-      { code: "GC190", block: "B: Plastic", title: "I have a scald: Burn" },
-      { code: "GC192", block: "B: Plastic", title: "I want to look better: Plastic and reconstructive surgery" },
-      { code: "GC193", block: "B: Urology", title: "Inguinal and scrotal swelling: different types of hernia" },
-      { code: "GC194", block: "B: Lower GI", title: "Intestinal obstruction: colorectal cancer" },
-      { code: "GC195", block: "B: Lower GI", title: "Lower and diffuse abdominal pain: RLQ problems; pelvic inflammatory disease; peritonitis and abdominal emergencies" },
-      { code: "GC196", block: "B: CTS", title: "Minimally Invasive Thoracic Surgery" },
-      { code: "GC197", block: "B: Upper GI", title: "Painless jaundice and epigastric mass: obstructive jaundice; pancreatic and CBD cancers" },
-      { code: "GC198", block: "B: Upper GI", title: "Profuse vomiting of fresh blood and in shock: severe upper GI bleeding" },
-      { code: "GC199", block: "B: Vascular", title: "Pulsating abdominal mass: aortic aneurysm" },
-      { code: "GC200", block: "B: HBP", title: "RUQ pain, jaundice and fever: Cholecytitis and cholangitis Imaging of GI system" },
-      { code: "GC201", block: "B: Plastic", title: "Skin ulcers: skin and subcutaneous lesions; skin cancer" },
-      { code: "GC202", block: "B: Plastic", title: "Surgery may cure your cancer: Surgical oncology" },
-      { code: "GC203", block: "B: Ped", title: "The child needs an operation: Common emergencies and surgery in childhood" },
-      { code: "GC204", block: "B: Ped", title: "The newborn baby cannot breathe: Oesophageal atresia, diaphragmatic hernia, and other surgery of lung" },
-      { code: "GC205", block: "B: Ped", title: "The newborn baby is vomiting repeatedly: Neonatal intestinal obstruction and other GI emergencies" },
-      { code: "GC206", block: "B: Vascular", title: "Toe gangrene and leg ulcer: peripheral vascular ischaemia; acute vascular emergencies" },
-      { code: "GC207", block: "B: Trauma", title: "Trauma Evaluation and Management (TEAM)" },
-      { code: "GC208", block: "B: Trauma", title: "Unconscious after an accident: Head injury" },
-      { code: "GC209", block: "B: Urology", title: "Urinary incontinence and overactive bladder" },
-      { code: "GC210", block: "B: Urology", title: "Urinary tract infection" },
-      { code: "GC211", block: "B: Vascular", title: "Varicose veins: diseases of the veins and lymphatics; venous thrombosis" },
-      { code: "GC212", block: "B: Upper GI", title: "Weight loss and vomiting: gastric cancer; abdominal imaging" },
-      { code: "GC213", block: "B: Ped", title: "Why do you wet your bed all the time? Paediatric urology" },
-      { code: "GC214", block: "B: ENT", title: "Common ear diseases and hearing loss" },
-      { code: "GC215", block: "B: ENT", title: "Common nasal conditions and nasopharyngeal carcinoma" },
-      { code: "GC216", block: "B: ENT", title: "Dysphonia: Laryngitis, voice abuse, tumour and laryngeal cancer" },
-      { code: "GC217", block: "B: ENT", title: "Facial nerve palsy and salivary gland diseases" },
-      { code: "GC218", block: "B: ENT", title: "I have a swelling in the neck: Neck mass" },
-      { code: "GC219", block: "B: ENT", title: "Infections and tumours in pharynx and oral cavity" },
-      { code: "GC220", block: "B: ENT", title: "Upper airway obstruction and tracheostomy" },
-      { code: "GC221", block: "B: ENT", title: "Vertigo: Peripheral and central" },
-      { code: "GC226", block: "B: Ortho", title: "Lumbar spine pathology" },
-      { code: "GC227", block: "B: Ortho", title: "Cervical spine pathology" },
-      { code: "GC228", block: "B: Ortho", title: "Knee osteoarthritis" },
-      { code: "GC229", block: "B: Ortho", title: "Hip Arthritis" },
-      { code: "GC230", block: "B: Ortho", title: "Knee sports injuries" },
-      { code: "GC231", block: "B: Ortho", title: "High energy trauma & open fracture" },
-      { code: "GC232", block: "B: Ortho", title: "Paediatric musculoskeletal injury" },
-      { code: "GC233", block: "B: Ortho", title: "Common hand injuries" },
-      { code: "GC234", block: "B: Ortho", title: "Common foot & ankle conditions" },
-      { code: "GC235", block: "B: Ortho", title: "Osteoporotic Related Fractures" },
-      { code: "GC236", block: "B: Ortho", title: "Common shoulder problems" },
-      { code: "GC237", block: "B: Ortho", title: "Musculoskeletal infection" },
-      { code: "SS1", block: "B: HBP", title: "Acute Pancreatitis" },
-      { code: "SS2", block: "B: HBP", title: "Advanced liver surgery for HBP malignancy" },
-      { code: "SS3", block: "B: Urology", title: "Benign Prostatic Hyperplasia" },
-      { code: "SS4", block: "B: Plastic", title: "Burns" },
-      { code: "SS5", block: "B: Ped", title: "Case Study – Paediatric Surgery: Bilious vomiting of new-born" },
-      { code: "SS6", block: "B: Ped", title: "Case Study – Paediatric Surgery: Urological conditions I" },
-      { code: "SS7", block: "B: Ped", title: "Case Study – Paediatric Surgery: Urological conditions II" },
-      { code: "SS8", block: "B: NSG", title: "Cererbrovascular Disease" },
-      { code: "SS9", block: "B: Plastic", title: "Cleft lip & palate" },
-      { code: "SS10", block: "B: Lower GI", title: "Colorectal Malignancy" },
-      { code: "SS11", block: "B: Lower GI", title: "Diverticular diseases" },
-      { code: "SS12", block: "B: HBP", title: "HCC" },
-      { code: "SS13", block: "B: HBP", title: "Gallstone & acute cholangitis" },
-      { code: "SS14", block: "B: NSG", title: "Hydrocephalus & Paediatric Neurosurgery" },
-      { code: "SS15", block: "B: Lower GI", title: "Inflammatory bowel disease: Surgical perspectives" },
-      { code: "SS16", block: "B: HBP", title: "Malignant Biliary Obstruction" },
-      { code: "SS17", block: "B: Endocrine", title: "Management of differentiated thyroid carcinoma" },
-      { code: "SS18", block: "B: Ped", title: "Neonatal Surgery" },
-      { code: "SS19", block: "B: Ped", title: "Paediatric General Surgery and Oncology" },
-      { code: "SS20", block: "B: Ped", title: "Paedaitric Thoracic Surgery" },
-      { code: "SS21", block: "B: Ped", title: "Paediatric Urology" },
-      { code: "SS22", block: "B: HBP", title: "Portal Hypertension" },
-      { code: "SS23", block: "B: Urology", title: "Urological Cancer" },
-      { code: "SS24", block: "B: Urology", title: "Urolithiasis" },
-      { code: "SS25", block: "B: ENT", title: "Some common head & neck conditions" },
-      { code: "SS26", block: "B: Lower GI", title: "Stoma and related problems" },
-      { code: "SS27", block: "B: Breast", title: "The management of breast cancer" }
-    ];
+			var Module = options[randomIndex];
 
-    function selectAll() {
-      const checkboxes = document.querySelectorAll('input[name="block"]');
-      checkboxes.forEach(cb => cb.checked = true);
-    }
+			var randomNumber;
+			if (Module === "IASM") {
+				randomNumber = Math.floor(Math.random() * 83) + 1;
+			} else if (Module === "CPRS") {
+				randomNumber = Math.floor(Math.random() * 93) + 1;
+			} else if (Module === "GIS") {
+				randomNumber = Math.floor(Math.random() * 31) + 1;
+			} else if (Module === "MSS") {
+				randomNumber = Math.floor(Math.random() * 33) + 1;
+			} else if (Module === "HNNS") {
+				randomNumber = Math.floor(Math.random() * 52) + 1;
+			} else if (Module === "HIS") {
+				randomNumber = Math.floor(Math.random() * 33) + 1;
+			} else {
+				randomNumber = Math.floor(Math.random() * 46) + 1;
+			}
 
-    function deselectAll() {
-      const checkboxes = document.querySelectorAll('input[name="block"]');
-      checkboxes.forEach(cb => cb.checked = false);
-    }
-
-    function generateLecture() {
-      const checkboxes = document.querySelectorAll('input[name="block"]:checked');
-      if (checkboxes.length === 0) {
-        alert("Please select at least one block.");
-        return;
-      }
-
-      const selectedBlocks = Array.from(checkboxes).map(cb => cb.value);
-      const filteredLectures = lectures.filter(lec => selectedBlocks.includes(lec.block));
-
-      if (filteredLectures.length === 0) {
-        alert("No lectures found for selected blocks.");
-        return;
-      }
-
-      const randomLecture = filteredLectures[Math.floor(Math.random() * filteredLectures.length)];
-
-      document.getElementById("result").innerHTML = `
-        <div class="lecture-code">${randomLecture.code}</div>
-        <div class="lecture-title">${randomLecture.title}</div>
-      `;
-    }
-  </script>
+			var result = document.getElementById("result");
+			result.innerHTML = "<strong>Module:</strong> " + Module + "<br><strong>Random number:</strong> " + randomNumber;
+		}
+	</script>
 </body>
 </html>
