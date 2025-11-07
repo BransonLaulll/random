@@ -91,6 +91,32 @@
       font-weight: 500;
     }
 
+    .section-divider {
+      margin: 20px 0 15px;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+    }
+
+    .section-divider span {
+      background: white;
+      padding: 0 15px;
+      color: #764ba2;
+      font-weight: 600;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
     .control-buttons {
       margin-bottom: 15px;
       display: flex;
@@ -155,6 +181,11 @@
       gap: 10px;
       width: 100%;
       max-width: 600px;
+    }
+
+    .checkbox-grid.type-grid {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 800px;
     }
 
     .checkbox-item {
@@ -603,6 +634,10 @@
         max-width: 100%;
       }
 
+      .checkbox-grid.type-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
       .checkbox-item label {
         padding: 10px 12px;
         font-size: 14px;
@@ -760,6 +795,10 @@
         gap: 6px;
       }
 
+      .checkbox-grid.type-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
       .checkbox-item label {
         padding: 12px;
       }
@@ -819,11 +858,47 @@
 
   <div class="desktop-container">
     <div class="main-content">
-      <p class="instruction">📚 Select the blocks you want to study from:</p>
+      <p class="instruction">📚 Select lecture types and blocks you want to study from:</p>
+
+      <!-- LECTURE TYPE SECTION -->
+      <div class="section-divider">
+        <span>📖 Lecture Type</span>
+      </div>
 
       <div class="control-buttons">
-        <button onclick="selectAll()">✓ Select All</button>
-        <button onclick="deselectAll()">✗ Deselect All</button>
+        <button onclick="selectAllTypes()">✓ Select All Types</button>
+        <button onclick="deselectAllTypes()">✗ Deselect All Types</button>
+      </div>
+
+      <div class="checkbox-container">
+        <div class="checkbox-grid type-grid">
+          <div class="checkbox-item">
+            <input type="checkbox" id="type-gc" name="type" value="GC" checked>
+            <label for="type-gc">GC (Lecture)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="type-ss" name="type" value="SS" checked>
+            <label for="type-ss">SS (Seminar)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="type-ar" name="type" value="AR">
+            <label for="type-ar">AR (Adv. Recall)</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="type-br" name="type" value="BR">
+            <label for="type-br">BR (Basic Recall)</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCKS SECTION -->
+      <div class="section-divider">
+        <span>🏥 Subject Blocks</span>
+      </div>
+
+      <div class="control-buttons">
+        <button onclick="selectAllBlocks()">✓ Select All Blocks</button>
+        <button onclick="deselectAllBlocks()">✗ Deselect All Blocks</button>
       </div>
 
       <div class="checkbox-container">
@@ -898,7 +973,7 @@
       </div>
 
       <div id="result">
-        <div class="no-result">Select blocks and click Generate to see a random lecture</div>
+        <div class="no-result">Select lecture types, blocks and click Generate to see a random lecture</div>
       </div>
 
       <div style="text-align: center;">
@@ -927,6 +1002,7 @@
 
   <script>
     const lectures = [
+      // Original GC Lectures
       { code: "GC108", block: "B: NSG", title: "A mass in the brain: brain tumours" },
       { code: "GC109", block: "B: NSG", title: "Headache and loss of consciousness: Acute stroke, subarachnoid haemorrhage and vascular malformation" },
       { code: "GC110", block: "B: NSG", title: "Paraplegia: spinal cord compression; transverse myelitis; spinal dysraphism; neuroimaging III: spinal cord" },
@@ -942,7 +1018,7 @@
       { code: "GC182", block: "B: Trauma", title: "Chopped and stabbed wound in gang fight: Nerves and vascular injury; Classification of injuries" },
       { code: "GC183", block: "B: Urology", title: "Common urologic malignalities and their presentations" },
       { code: "GC184", block: "B: Urology", title: "Erection and erectile dysfunction" },
-      { code: "GC185", block: "B: Misc", title: "Feed him up before surgery: Surgical nutrition, Enteral and parenteral feeding" },
+      { code: "GC185", block: "B: Upper GI", title: "Feed him up before surgery: Surgical nutrition, Enteral and parenteral feeding" },
       { code: "GC186", block: "B: Lower GI", title: "Fresh blood in stool: lower GI bleeding" },
       { code: "GC187", block: "B: ENT", title: "Head and neck cancer problems: Function and shape" },
       { code: "GC188", block: "B: Trauma", title: "Hit by a van, in shock with internal bleeding: Abdominal injury" },
@@ -990,6 +1066,8 @@
       { code: "GC235", block: "B: Ortho", title: "Osteoporotic Related Fractures" },
       { code: "GC236", block: "B: Ortho", title: "Common shoulder problems" },
       { code: "GC237", block: "B: Ortho", title: "Musculoskeletal infection" },
+      
+      // SS Lectures
       { code: "SS1", block: "B: HBP", title: "Acute Pancreatitis" },
       { code: "SS2", block: "B: HBP", title: "Advanced liver surgery for HBP malignancy" },
       { code: "SS3", block: "B: Urology", title: "Benign Prostatic Hyperplasia" },
@@ -1016,19 +1094,187 @@
       { code: "SS24", block: "B: Urology", title: "Urolithiasis" },
       { code: "SS25", block: "B: ENT", title: "Some common head & neck conditions" },
       { code: "SS26", block: "B: Lower GI", title: "Stoma and related problems" },
-      { code: "SS27", block: "B: Breast", title: "The management of breast cancer" }
+      { code: "SS27", block: "B: Breast", title: "The management of breast cancer" },
+
+      // BR Lectures
+      { code: "BR1", block: "B: Misc", title: "Introduction" },
+      { code: "BR2", block: "B: Misc", title: "Surgical Syndromes" },
+      { code: "BR3", block: "B: Misc", title: "Surgical Most Commons" },
+      { code: "BR4", block: "B: Misc", title: "Surgical Percentages" },
+      { code: "BR5", block: "B: Misc", title: "Surgical Instruments" },
+      { code: "BR6", block: "B: Misc", title: "Sutures and Stitches" },
+      { code: "BR7", block: "B: Misc", title: "Surgical Knot Tying" },
+      { code: "BR8", block: "B: Misc", title: "Procedures for the Surgical Ward and Clinic" },
+      { code: "BR9", block: "B: Misc", title: "Incisions" },
+      { code: "BR10", block: "B: Misc", title: "Surgical Positions" },
+      { code: "BR11", block: "B: Misc", title: "Surgical Speak" },
+      { code: "BR12", block: "B: Misc", title: "Preoperative" },
+      { code: "BR13", block: "B: Misc", title: "Surgical Operations You Should Know" },
+      { code: "BR14", block: "B: Plastic", title: "Wounds" },
+      { code: "BR15", block: "B: Misc", title: "Drains and Tubes" },
+      { code: "BR16", block: "B: Misc", title: "Surgical Anatomy Pearls" },
+      { code: "BR17", block: "B: Misc", title: "Fluids and Electrolytes" },
+      { code: "BR18", block: "B: Misc", title: "Blood and Blood Products" },
+      { code: "BR19", block: "B: Misc", title: "Surgical Hemostasis" },
+      { code: "BR20", block: "B: Misc", title: "Common Surgical Medications" },
+      { code: "BR21", block: "B: Misc", title: "Complications" },
+      { code: "BR22", block: "B: Misc", title: "Common Causes of Ward Emergencies" },
+      { code: "BR23", block: "B: Misc", title: "Surgical Respiratory Care" },
+      { code: "BR24", block: "B: Misc", title: "Surgical Nutrition" },
+      { code: "BR25", block: "B: Misc", title: "Shock" },
+      { code: "BR26", block: "B: Misc", title: "Surgical Infection" },
+      { code: "BR27", block: "B: Misc", title: "Fever" },
+      { code: "BR28", block: "B: Misc", title: "Surgical Prophylaxis" },
+      { code: "BR29", block: "B: Misc", title: "Surgical Radiology" },
+      { code: "BR30", block: "B: Misc", title: "Anesthesia" },
+      { code: "BR31", block: "B: Misc", title: "Surgical Ulcers" },
+      { code: "BR32", block: "B: Misc", title: "Surgical Oncology" },
+      { code: "BR33", block: "B: Upper GI", title: "GI Hormones and Physiology" },
+      { code: "BR34", block: "B: Upper GI", title: "Acute Abdomen and Referred Pain" },
+      { code: "BR35", block: "B: Urology", title: "Hernias" },
+      { code: "BR36", block: "B: Lower GI", title: "Laparoscopy" },
+      { code: "BR37", block: "B: Trauma", title: "Trauma" },
+      { code: "BR38", block: "B: Plastic", title: "Burns" },
+      { code: "BR39", block: "B: Upper GI", title: "Upper GI Bleeding" },
+      { code: "BR40", block: "B: Upper GI", title: "Stomach" },
+      { code: "BR41", block: "B: Upper GI", title: "Bariatric Surgery" },
+      { code: "BR42", block: "B: Lower GI", title: "Ostomies" },
+      { code: "BR43", block: "B: Lower GI", title: "Small Intestine" },
+      { code: "BR44", block: "B: Lower GI", title: "Appendix" },
+      { code: "BR45", block: "B: Lower GI", title: "Carcinoid Tumors" },
+      { code: "BR46", block: "B: Lower GI", title: "Fistulas" },
+      { code: "BR47", block: "B: Lower GI", title: "Colon and Rectum" },
+      { code: "BR48", block: "B: Lower GI", title: "Anus" },
+      { code: "BR49", block: "B: Lower GI", title: "Lower GI Bleeding" },
+      { code: "BR50", block: "B: Lower GI", title: "Inflammatory Bowel Disease: Crohn's and UC" },
+      { code: "BR51", block: "B: HBP", title: "Liver" },
+      { code: "BR52", block: "B: HBP", title: "Portal Hypertension" },
+      { code: "BR53", block: "B: HBP", title: "Biliary Tract" },
+      { code: "BR54", block: "B: HBP", title: "Pancreas" },
+      { code: "BR55", block: "B: Breast", title: "Breast" },
+      { code: "BR56", block: "B: Endocrine", title: "Endocrine" },
+      { code: "BR57", block: "B: Endocrine", title: "Thyroid Gland" },
+      { code: "BR58", block: "B: Endocrine", title: "Parathyroid" },
+      { code: "BR59", block: "B: HBP", title: "Spleen and Splenectomy" },
+      { code: "BR60", block: "B: Vascular", title: "Surgically Correctable HTN" },
+      { code: "BR61", block: "B: Plastic", title: "Soft Tissue Sarcomas and Lymphomas" },
+      { code: "BR62", block: "B: Plastic", title: "Skin Lesions" },
+      { code: "BR63", block: "B: Plastic", title: "Melanoma" },
+      { code: "BR64", block: "B: Misc", title: "Surgical Intensive Care" },
+      { code: "BR65", block: "B: Vascular", title: "Vascular Surgery" },
+      { code: "BR66", block: "B: Ped", title: "Pediatric Surgery" },
+      { code: "BR67", block: "B: Plastic", title: "Plastic Surgery" },
+      { code: "BR68", block: "B: ENT", title: "Hand Surgery" },
+      { code: "BR69", block: "B: ENT", title: "Otolaryngology: Head and Neck Surgery" },
+      { code: "BR70", block: "B: CTS", title: "Thoracic Surgery" },
+      { code: "BR71", block: "B: CTS", title: "Cardiovascular Surgery" },
+      { code: "BR72", block: "B: Misc", title: "Transplant Surgery" },
+      { code: "BR73", block: "B: Ortho", title: "Orthopedic Surgery" },
+      { code: "BR74", block: "B: NSG", title: "Neurosurgery" },
+      { code: "BR75", block: "B: Urology", title: "Urology" },
+
+      // AR Lectures
+      { code: "AR1a", block: "B: Misc", title: "Surgical Notes" },
+      { code: "AR1b", block: "B: Misc", title: "Common Abbreviations You Should Know" },
+      { code: "AR1c", block: "B: Misc", title: "Glossary of Surgical Terms You Should Know" },
+      { code: "AR1d", block: "B: Misc", title: "Surgery Signs, Triads, etc. You Should Know" },
+      { code: "AR2", block: "B: Misc", title: "Surgical Syndromes" },
+      { code: "AR3", block: "B: Misc", title: "Surgical Most Commons" },
+      { code: "AR4", block: "B: Misc", title: "Surgical Percentages" },
+      { code: "AR5", block: "B: Misc", title: "Surgical History" },
+      { code: "AR6", block: "B: Misc", title: "Surgical Instruments" },
+      { code: "AR7", block: "B: Misc", title: "Sutures and Stitches" },
+      { code: "AR8", block: "B: Misc", title: "Surgical Knot Tying" },
+      { code: "AR9", block: "B: Misc", title: "Procedures for the Surgical Ward and Clinic" },
+      { code: "AR10", block: "B: Misc", title: "Incisions" },
+      { code: "AR11", block: "B: Misc", title: "Surgical Positions" },
+      { code: "AR12", block: "B: Misc", title: "Surgical Speak" },
+      { code: "AR13", block: "B: Misc", title: "Preoperative 101" },
+      { code: "AR14", block: "B: Misc", title: "Surgical Operations You Should Know" },
+      { code: "AR15", block: "B: Plastic", title: "Wounds" },
+      { code: "AR16", block: "B: Misc", title: "Drains and Tubes" },
+      { code: "AR17", block: "B: Misc", title: "Surgical Anatomy Pearls" },
+      { code: "AR18", block: "B: Misc", title: "Fluids and Electrolytes" },
+      { code: "AR19", block: "B: Misc", title: "Blood and Blood Products" },
+      { code: "AR20", block: "B: Misc", title: "Surgical Hemostasis" },
+      { code: "AR21", block: "B: Misc", title: "Common Surgical Medications" },
+      { code: "AR22", block: "B: Misc", title: "Complications" },
+      { code: "AR23", block: "B: Misc", title: "Common Causes of Ward Emergencies" },
+      { code: "AR24", block: "B: Misc", title: "Surgical Respiratory Care" },
+      { code: "AR25", block: "B: Misc", title: "Surgical Nutrition" },
+      { code: "AR26", block: "B: Misc", title: "Shock" },
+      { code: "AR27", block: "B: Misc", title: "Surgical Infection" },
+      { code: "AR28", block: "B: Misc", title: "Fever" },
+      { code: "AR29", block: "B: Misc", title: "Surgical Prophylaxis" },
+      { code: "AR30", block: "B: Misc", title: "Surgical Radiology" },
+      { code: "AR31", block: "B: Misc", title: "Anesthesia" },
+      { code: "AR32", block: "B: Misc", title: "Surgical Ulcers" },
+      { code: "AR33", block: "B: Misc", title: "Surgical Oncology" },
+      { code: "AR34", block: "B: Upper GI", title: "GI Hormones and Physiology" },
+      { code: "AR35", block: "B: Upper GI", title: "Acute Abdomen and Referred Pain" },
+      { code: "AR36", block: "B: Urology", title: "Hernias" },
+      { code: "AR37", block: "B: Lower GI", title: "Laparoscopy" },
+      { code: "AR38", block: "B: Trauma", title: "Trauma" },
+      { code: "AR39", block: "B: Plastic", title: "Burns" },
+      { code: "AR40", block: "B: Upper GI", title: "Upper GI Bleeding" },
+      { code: "AR41", block: "B: Upper GI", title: "Stomach" },
+      { code: "AR42", block: "B: Upper GI", title: "Bariatric Surgery" },
+      { code: "AR43", block: "B: Lower GI", title: "Ostomies" },
+      { code: "AR44", block: "B: Lower GI", title: "Small Intestine" },
+      { code: "AR45", block: "B: Lower GI", title: "Appendix" },
+      { code: "AR46", block: "B: Lower GI", title: "Carcinoid Tumors" },
+      { code: "AR47", block: "B: Lower GI", title: "Fistulas" },
+      { code: "AR48", block: "B: Lower GI", title: "Colon and Rectum" },
+      { code: "AR49", block: "B: Lower GI", title: "Anus" },
+      { code: "AR50", block: "B: Lower GI", title: "Lower GI Bleeding" },
+      { code: "AR51", block: "B: Lower GI", title: "Inflammatory Bowel Disease: Crohn's and UC" },
+      { code: "AR52", block: "B: HBP", title: "Liver" },
+      { code: "AR53", block: "B: HBP", title: "Portal Hypertension" },
+      { code: "AR54", block: "B: HBP", title: "Biliary Tract" },
+      { code: "AR55", block: "B: HBP", title: "Pancreas" },
+      { code: "AR56", block: "B: Breast", title: "Breast" },
+      { code: "AR57", block: "B: Endocrine", title: "Endocrine" },
+      { code: "AR58", block: "B: Endocrine", title: "Thyroid Gland" },
+      { code: "AR59", block: "B: Endocrine", title: "Parathyroid" },
+      { code: "AR60", block: "B: HBP", title: "Spleen and Splenectomy" },
+      { code: "AR61", block: "B: Vascular", title: "Surgically Correctable HTN" },
+      { code: "AR62", block: "B: Plastic", title: "Soft Tissue Sarcomas and Lymphomas" },
+      { code: "AR63", block: "B: Plastic", title: "Skin Lesions" },
+      { code: "AR64", block: "B: Plastic", title: "Melanoma" },
+      { code: "AR65", block: "B: Misc", title: "Surgical Intensive Care" },
+      { code: "AR66", block: "B: Vascular", title: "Vascular Surgery" },
+      { code: "AR67", block: "B: Ped", title: "Pediatric Surgery" },
+      { code: "AR68", block: "B: Plastic", title: "Plastic Surgery" },
+      { code: "AR69", block: "B: ENT", title: "Hand Surgery" },
+      { code: "AR70", block: "B: ENT", title: "Otolaryngology: Head and Neck Surgery" },
+      { code: "AR71", block: "B: CTS", title: "Thoracic Surgery" },
+      { code: "AR72", block: "B: CTS", title: "Cardiovascular Surgery" },
+      { code: "AR73", block: "B: Misc", title: "Transplant Surgery" },
+      { code: "AR74", block: "B: Ortho", title: "Orthopaedic Surgery" },
+      { code: "AR75", block: "B: NSG", title: "Neurosurgery" },
+      { code: "AR76", block: "B: Urology", title: "Urology" }
     ];
 
     let shownLectures = [];
     let shownLectureDetails = [];
     let currentFilteredLectures = [];
 
-    function selectAll() {
+    function selectAllTypes() {
+      const checkboxes = document.querySelectorAll('input[name="type"]');
+      checkboxes.forEach(cb => cb.checked = true);
+    }
+
+    function deselectAllTypes() {
+      const checkboxes = document.querySelectorAll('input[name="type"]');
+      checkboxes.forEach(cb => cb.checked = false);
+    }
+
+    function selectAllBlocks() {
       const checkboxes = document.querySelectorAll('input[name="block"]');
       checkboxes.forEach(cb => cb.checked = true);
     }
 
-    function deselectAll() {
+    function deselectAllBlocks() {
       const checkboxes = document.querySelectorAll('input[name="block"]');
       checkboxes.forEach(cb => cb.checked = false);
     }
@@ -1040,6 +1286,14 @@
       document.getElementById('counter').textContent = '';
       updateHistoryDisplay();
       alert('Progress has been reset. All lectures can be shown again.');
+    }
+
+    function getLectureType(code) {
+      if (code.startsWith('GC')) return 'GC';
+      if (code.startsWith('SS')) return 'SS';
+      if (code.startsWith('AR')) return 'AR';
+      if (code.startsWith('BR')) return 'BR';
+      return '';
     }
 
     function updateCounter() {
@@ -1077,18 +1331,31 @@
     }
 
     function generateLecture() {
-      const checkboxes = document.querySelectorAll('input[name="block"]:checked');
-      if (checkboxes.length === 0) {
+      // Check lecture types
+      const typeCheckboxes = document.querySelectorAll('input[name="type"]:checked');
+      if (typeCheckboxes.length === 0) {
+        alert("Please select at least one lecture type (GC, SS, AR, or BR).");
+        return;
+      }
+
+      // Check blocks
+      const blockCheckboxes = document.querySelectorAll('input[name="block"]:checked');
+      if (blockCheckboxes.length === 0) {
         alert("Please select at least one block.");
         return;
       }
 
-      const selectedBlocks = Array.from(checkboxes).map(cb => cb.value);
+      const selectedTypes = Array.from(typeCheckboxes).map(cb => cb.value);
+      const selectedBlocks = Array.from(blockCheckboxes).map(cb => cb.value);
 
-      currentFilteredLectures = lectures.filter(lec => selectedBlocks.includes(lec.block));
+      // Filter by both type and block
+      currentFilteredLectures = lectures.filter(lec => {
+        const lectureType = getLectureType(lec.code);
+        return selectedTypes.includes(lectureType) && selectedBlocks.includes(lec.block);
+      });
 
       if (currentFilteredLectures.length === 0) {
-        alert("No lectures found for selected blocks.");
+        alert("No lectures found for the selected types and blocks.");
         return;
       }
 
@@ -1097,7 +1364,7 @@
       let randomLecture;
       
       if (availableLectures.length === 0) {
-        alert("🎉 Congratulations! You have gone through every lecture in the selected blocks. The list will now reset.");
+        alert("🎉 Congratulations! You have gone through every lecture in the selected types and blocks. The list will now reset.");
         shownLectures = [];
         shownLectureDetails = [];
         document.getElementById('resetBtn').classList.remove('show');
