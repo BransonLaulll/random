@@ -184,8 +184,8 @@
     }
 
     .checkbox-grid.type-grid {
-      grid-template-columns: repeat(4, 1fr);
-      max-width: 800px;
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 600px;
     }
 
     .checkbox-item {
@@ -798,7 +798,7 @@
       }
 
       .checkbox-grid.type-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
       }
 
       .checkbox-item label {
@@ -883,12 +883,8 @@
             <label for="type-ss">SS (Seminar)</label>
           </div>
           <div class="checkbox-item">
-            <input type="checkbox" id="type-ar" name="type" value="AR">
-            <label for="type-ar">AR (Adv. Recall)</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="type-br" name="type" value="BR">
-            <label for="type-br">BR (Basic Recall)</label>
+            <input type="checkbox" id="type-recall" name="type" value="Recall">
+            <label for="type-recall">Recall (AR/BR)</label>
           </div>
         </div>
       </div>
@@ -1098,163 +1094,87 @@
       { code: "SS26", block: "B: Lower GI", title: "Stoma and related problems" },
       { code: "SS27", block: "B: Breast", title: "The management of breast cancer" },
 
-      // BR Lectures
+      // Combined Recall Lectures (BR/AR merged)
       { code: "BR1", block: "B: Misc", title: "Introduction" },
-      { code: "BR2", block: "B: Misc", title: "Surgical Syndromes" },
-      { code: "BR3", block: "B: Misc", title: "Surgical Most Commons" },
-      { code: "BR4", block: "B: Misc", title: "Surgical Percentages" },
-      { code: "BR5", block: "B: Misc", title: "Surgical Instruments" },
-      { code: "BR6", block: "B: Misc", title: "Sutures and Stitches" },
-      { code: "BR7", block: "B: Misc", title: "Surgical Knot Tying" },
-      { code: "BR8", block: "B: Misc", title: "Procedures for the Surgical Ward and Clinic" },
-      { code: "BR9", block: "B: Misc", title: "Incisions" },
-      { code: "BR10", block: "B: Misc", title: "Surgical Positions" },
-      { code: "BR11", block: "B: Misc", title: "Surgical Speak" },
-      { code: "BR12", block: "B: Misc", title: "Preoperative" },
-      { code: "BR13", block: "B: Misc", title: "Surgical Operations You Should Know" },
-      { code: "BR14", block: "B: Plastic", title: "Wounds" },
-      { code: "BR15", block: "B: Misc", title: "Drains and Tubes" },
-      { code: "BR16", block: "B: Misc", title: "Surgical Anatomy Pearls" },
-      { code: "BR17", block: "B: Misc", title: "Fluids and Electrolytes" },
-      { code: "BR18", block: "B: Misc", title: "Blood and Blood Products" },
-      { code: "BR19", block: "B: Misc", title: "Surgical Hemostasis" },
-      { code: "BR20", block: "B: Misc", title: "Common Surgical Medications" },
-      { code: "BR21", block: "B: Misc", title: "Complications" },
-      { code: "BR22", block: "B: Misc", title: "Common Causes of Ward Emergencies" },
-      { code: "BR23", block: "B: Misc", title: "Surgical Respiratory Care" },
-      { code: "BR24", block: "B: Misc", title: "Surgical Nutrition" },
-      { code: "BR25", block: "B: Misc", title: "Shock" },
-      { code: "BR26", block: "B: Misc", title: "Surgical Infection" },
-      { code: "BR27", block: "B: Misc", title: "Fever" },
-      { code: "BR28", block: "B: Misc", title: "Surgical Prophylaxis" },
-      { code: "BR29", block: "B: Misc", title: "Surgical Radiology" },
-      { code: "BR30", block: "B: Misc", title: "Anesthesia" },
-      { code: "BR31", block: "B: Misc", title: "Surgical Ulcers" },
-      { code: "BR32", block: "B: Misc", title: "Surgical Oncology" },
-      { code: "BR33", block: "B: Upper GI", title: "GI Hormones and Physiology" },
-      { code: "BR34", block: "B: Upper GI", title: "Acute Abdomen and Referred Pain" },
-      { code: "BR35", block: "B: Urology", title: "Hernias" },
-      { code: "BR36", block: "B: Lower GI", title: "Laparoscopy" },
-      { code: "BR37", block: "B: Trauma", title: "Trauma" },
-      { code: "BR38", block: "B: Plastic", title: "Burns" },
-      { code: "BR39", block: "B: Upper GI", title: "Upper GI Bleeding" },
-      { code: "BR40", block: "B: Upper GI", title: "Stomach" },
-      { code: "BR41", block: "B: Upper GI", title: "Bariatric Surgery" },
-      { code: "BR42", block: "B: Lower GI", title: "Ostomies" },
-      { code: "BR43", block: "B: Lower GI", title: "Small Intestine" },
-      { code: "BR44", block: "B: Lower GI", title: "Appendix" },
-      { code: "BR45", block: "B: Lower GI", title: "Carcinoid Tumors" },
-      { code: "BR46", block: "B: Lower GI", title: "Fistulas" },
-      { code: "BR47", block: "B: Lower GI", title: "Colon and Rectum" },
-      { code: "BR48", block: "B: Lower GI", title: "Anus" },
-      { code: "BR49", block: "B: Lower GI", title: "Lower GI Bleeding" },
-      { code: "BR50", block: "B: Lower GI", title: "Inflammatory Bowel Disease: Crohn's and UC" },
-      { code: "BR51", block: "B: HBP", title: "Liver" },
-      { code: "BR52", block: "B: HBP", title: "Portal Hypertension" },
-      { code: "BR53", block: "B: HBP", title: "Biliary Tract" },
-      { code: "BR54", block: "B: HBP", title: "Pancreas" },
-      { code: "BR55", block: "B: Breast", title: "Breast" },
-      { code: "BR56", block: "B: Endocrine", title: "Endocrine" },
-      { code: "BR57", block: "B: Endocrine", title: "Thyroid Gland" },
-      { code: "BR58", block: "B: Endocrine", title: "Parathyroid" },
-      { code: "BR59", block: "B: HBP", title: "Spleen and Splenectomy" },
-      { code: "BR60", block: "B: Vascular", title: "Surgically Correctable HTN" },
-      { code: "BR61", block: "B: Plastic", title: "Soft Tissue Sarcomas and Lymphomas" },
-      { code: "BR62", block: "B: Plastic", title: "Skin Lesions" },
-      { code: "BR63", block: "B: Plastic", title: "Melanoma" },
-      { code: "BR64", block: "B: Misc", title: "Surgical Intensive Care" },
-      { code: "BR65", block: "B: Vascular", title: "Vascular Surgery" },
-      { code: "BR66", block: "B: Ped", title: "Pediatric Surgery" },
-      { code: "BR67", block: "B: Plastic", title: "Plastic Surgery" },
-      { code: "BR68", block: "B: ENT", title: "Hand Surgery" },
-      { code: "BR69", block: "B: ENT", title: "Otolaryngology: Head and Neck Surgery" },
-      { code: "BR70", block: "B: CTS", title: "Thoracic Surgery" },
-      { code: "BR71", block: "B: CTS", title: "Cardiovascular Surgery" },
-      { code: "BR72", block: "B: Misc", title: "Transplant Surgery" },
-      { code: "BR73", block: "B: Ortho", title: "Orthopedic Surgery" },
-      { code: "BR74", block: "B: NSG", title: "Neurosurgery" },
-      { code: "BR75", block: "B: Urology", title: "Urology" },
-
-      // AR Lectures
       { code: "AR1a", block: "B: Misc", title: "Surgical Notes" },
       { code: "AR1b", block: "B: Misc", title: "Common Abbreviations You Should Know" },
       { code: "AR1c", block: "B: Misc", title: "Glossary of Surgical Terms You Should Know" },
       { code: "AR1d", block: "B: Misc", title: "Surgery Signs, Triads, etc. You Should Know" },
-      { code: "AR2", block: "B: Misc", title: "Surgical Syndromes" },
-      { code: "AR3", block: "B: Misc", title: "Surgical Most Commons" },
-      { code: "AR4", block: "B: Misc", title: "Surgical Percentages" },
+      { code: "AR2 (BR2)", block: "B: Misc", title: "Surgical Syndromes" },
+      { code: "AR3 (BR3)", block: "B: Misc", title: "Surgical Most Commons" },
+      { code: "AR4 (BR4)", block: "B: Misc", title: "Surgical Percentages" },
       { code: "AR5", block: "B: Misc", title: "Surgical History" },
-      { code: "AR6", block: "B: Misc", title: "Surgical Instruments" },
-      { code: "AR7", block: "B: Misc", title: "Sutures and Stitches" },
-      { code: "AR8", block: "B: Misc", title: "Surgical Knot Tying" },
-      { code: "AR9", block: "B: Misc", title: "Procedures for the Surgical Ward and Clinic" },
-      { code: "AR10", block: "B: Misc", title: "Incisions" },
-      { code: "AR11", block: "B: Misc", title: "Surgical Positions" },
-      { code: "AR12", block: "B: Misc", title: "Surgical Speak" },
-      { code: "AR13", block: "B: Misc", title: "Preoperative 101" },
-      { code: "AR14", block: "B: Misc", title: "Surgical Operations You Should Know" },
-      { code: "AR15", block: "B: Plastic", title: "Wounds" },
-      { code: "AR16", block: "B: Misc", title: "Drains and Tubes" },
-      { code: "AR17", block: "B: Misc", title: "Surgical Anatomy Pearls" },
-      { code: "AR18", block: "B: Misc", title: "Fluids and Electrolytes" },
-      { code: "AR19", block: "B: Misc", title: "Blood and Blood Products" },
-      { code: "AR20", block: "B: Misc", title: "Surgical Hemostasis" },
-      { code: "AR21", block: "B: Misc", title: "Common Surgical Medications" },
-      { code: "AR22", block: "B: Misc", title: "Complications" },
-      { code: "AR23", block: "B: Misc", title: "Common Causes of Ward Emergencies" },
-      { code: "AR24", block: "B: Misc", title: "Surgical Respiratory Care" },
-      { code: "AR25", block: "B: Misc", title: "Surgical Nutrition" },
-      { code: "AR26", block: "B: Misc", title: "Shock" },
-      { code: "AR27", block: "B: Misc", title: "Surgical Infection" },
-      { code: "AR28", block: "B: Misc", title: "Fever" },
-      { code: "AR29", block: "B: Misc", title: "Surgical Prophylaxis" },
-      { code: "AR30", block: "B: Misc", title: "Surgical Radiology" },
-      { code: "AR31", block: "B: Misc", title: "Anesthesia" },
-      { code: "AR32", block: "B: Misc", title: "Surgical Ulcers" },
-      { code: "AR33", block: "B: Misc", title: "Surgical Oncology" },
-      { code: "AR34", block: "B: Upper GI", title: "GI Hormones and Physiology" },
-      { code: "AR35", block: "B: Upper GI", title: "Acute Abdomen and Referred Pain" },
-      { code: "AR36", block: "B: Urology", title: "Hernias" },
-      { code: "AR37", block: "B: Lower GI", title: "Laparoscopy" },
-      { code: "AR38", block: "B: Trauma", title: "Trauma" },
-      { code: "AR39", block: "B: Plastic", title: "Burns" },
-      { code: "AR40", block: "B: Upper GI", title: "Upper GI Bleeding" },
-      { code: "AR41", block: "B: Upper GI", title: "Stomach" },
-      { code: "AR42", block: "B: Upper GI", title: "Bariatric Surgery" },
-      { code: "AR43", block: "B: Lower GI", title: "Ostomies" },
-      { code: "AR44", block: "B: Lower GI", title: "Small Intestine" },
-      { code: "AR45", block: "B: Lower GI", title: "Appendix" },
-      { code: "AR46", block: "B: Lower GI", title: "Carcinoid Tumors" },
-      { code: "AR47", block: "B: Lower GI", title: "Fistulas" },
-      { code: "AR48", block: "B: Lower GI", title: "Colon and Rectum" },
-      { code: "AR49", block: "B: Lower GI", title: "Anus" },
-      { code: "AR50", block: "B: Lower GI", title: "Lower GI Bleeding" },
-      { code: "AR51", block: "B: Lower GI", title: "Inflammatory Bowel Disease: Crohn's and UC" },
-      { code: "AR52", block: "B: HBP", title: "Liver" },
-      { code: "AR53", block: "B: HBP", title: "Portal Hypertension" },
-      { code: "AR54", block: "B: HBP", title: "Biliary Tract" },
-      { code: "AR55", block: "B: HBP", title: "Pancreas" },
-      { code: "AR56", block: "B: Breast", title: "Breast" },
-      { code: "AR57", block: "B: Endocrine", title: "Endocrine" },
-      { code: "AR58", block: "B: Endocrine", title: "Thyroid Gland" },
-      { code: "AR59", block: "B: Endocrine", title: "Parathyroid" },
-      { code: "AR60", block: "B: HBP", title: "Spleen and Splenectomy" },
-      { code: "AR61", block: "B: Vascular", title: "Surgically Correctable HTN" },
-      { code: "AR62", block: "B: Plastic", title: "Soft Tissue Sarcomas and Lymphomas" },
-      { code: "AR63", block: "B: Plastic", title: "Skin Lesions" },
-      { code: "AR64", block: "B: Plastic", title: "Melanoma" },
-      { code: "AR65", block: "B: Misc", title: "Surgical Intensive Care" },
-      { code: "AR66", block: "B: Vascular", title: "Vascular Surgery" },
-      { code: "AR67", block: "B: Ped", title: "Pediatric Surgery" },
-      { code: "AR68", block: "B: Plastic", title: "Plastic Surgery" },
-      { code: "AR69", block: "B: ENT", title: "Hand Surgery" },
-      { code: "AR70", block: "B: ENT", title: "Otolaryngology: Head and Neck Surgery" },
-      { code: "AR71", block: "B: CTS", title: "Thoracic Surgery" },
-      { code: "AR72", block: "B: CTS", title: "Cardiovascular Surgery" },
-      { code: "AR73", block: "B: Misc", title: "Transplant Surgery" },
-      { code: "AR74", block: "B: Ortho", title: "Orthopaedic Surgery" },
-      { code: "AR75", block: "B: NSG", title: "Neurosurgery" },
-      { code: "AR76", block: "B: Urology", title: "Urology" }
+      { code: "AR6 (BR5)", block: "B: Misc", title: "Surgical Instruments" },
+      { code: "AR7 (BR6)", block: "B: Misc", title: "Sutures and Stitches" },
+      { code: "AR8 (BR7)", block: "B: Misc", title: "Surgical Knot Tying" },
+      { code: "AR9 (BR8)", block: "B: Misc", title: "Procedures for the Surgical Ward and Clinic" },
+      { code: "AR10 (BR9)", block: "B: Misc", title: "Incisions" },
+      { code: "AR11 (BR10)", block: "B: Misc", title: "Surgical Positions" },
+      { code: "AR12 (BR11)", block: "B: Misc", title: "Surgical Speak" },
+      { code: "AR13 (BR12)", block: "B: Misc", title: "Preoperative 101" },
+      { code: "AR14 (BR13)", block: "B: Misc", title: "Surgical Operations You Should Know" },
+      { code: "AR15 (BR14)", block: "B: Plastic", title: "Wounds" },
+      { code: "AR16 (BR15)", block: "B: Misc", title: "Drains and Tubes" },
+      { code: "AR17 (BR16)", block: "B: Misc", title: "Surgical Anatomy Pearls" },
+      { code: "AR18 (BR17)", block: "B: Misc", title: "Fluids and Electrolytes" },
+      { code: "AR19 (BR18)", block: "B: Misc", title: "Blood and Blood Products" },
+      { code: "AR20 (BR19)", block: "B: Misc", title: "Surgical Hemostasis" },
+      { code: "AR21 (BR20)", block: "B: Misc", title: "Common Surgical Medications" },
+      { code: "AR22 (BR21)", block: "B: Misc", title: "Complications" },
+      { code: "AR23 (BR22)", block: "B: Misc", title: "Common Causes of Ward Emergencies" },
+      { code: "AR24 (BR23)", block: "B: Misc", title: "Surgical Respiratory Care" },
+      { code: "AR25 (BR24)", block: "B: Misc", title: "Surgical Nutrition" },
+      { code: "AR26 (BR25)", block: "B: Misc", title: "Shock" },
+      { code: "AR27 (BR26)", block: "B: Misc", title: "Surgical Infection" },
+      { code: "AR28 (BR27)", block: "B: Misc", title: "Fever" },
+      { code: "AR29 (BR28)", block: "B: Misc", title: "Surgical Prophylaxis" },
+      { code: "AR30 (BR29)", block: "B: Misc", title: "Surgical Radiology" },
+      { code: "AR31 (BR30)", block: "B: Misc", title: "Anesthesia" },
+      { code: "AR32 (BR31)", block: "B: Misc", title: "Surgical Ulcers" },
+      { code: "AR33 (BR32)", block: "B: Misc", title: "Surgical Oncology" },
+      { code: "AR34 (BR33)", block: "B: Upper GI", title: "GI Hormones and Physiology" },
+      { code: "AR35 (BR34)", block: "B: Upper GI", title: "Acute Abdomen and Referred Pain" },
+      { code: "AR36 (BR35)", block: "B: Urology", title: "Hernias" },
+      { code: "AR37 (BR36)", block: "B: Lower GI", title: "Laparoscopy" },
+      { code: "AR38 (BR37)", block: "B: Trauma", title: "Trauma" },
+      { code: "AR39 (BR38)", block: "B: Plastic", title: "Burns" },
+      { code: "AR40 (BR39)", block: "B: Upper GI", title: "Upper GI Bleeding" },
+      { code: "AR41 (BR40)", block: "B: Upper GI", title: "Stomach" },
+      { code: "AR42 (BR41)", block: "B: Upper GI", title: "Bariatric Surgery" },
+      { code: "AR43 (BR42)", block: "B: Lower GI", title: "Ostomies" },
+      { code: "AR44 (BR43)", block: "B: Lower GI", title: "Small Intestine" },
+      { code: "AR45 (BR44)", block: "B: Lower GI", title: "Appendix" },
+      { code: "AR46 (BR45)", block: "B: Lower GI", title: "Carcinoid Tumors" },
+      { code: "AR47 (BR46)", block: "B: Lower GI", title: "Fistulas" },
+      { code: "AR48 (BR47)", block: "B: Lower GI", title: "Colon and Rectum" },
+      { code: "AR49 (BR48)", block: "B: Lower GI", title: "Anus" },
+      { code: "AR50 (BR49)", block: "B: Lower GI", title: "Lower GI Bleeding" },
+      { code: "AR51 (BR50)", block: "B: Lower GI", title: "Inflammatory Bowel Disease: Crohn's and UC" },
+      { code: "AR52 (BR51)", block: "B: HBP", title: "Liver" },
+      { code: "AR53 (BR52)", block: "B: HBP", title: "Portal Hypertension" },
+      { code: "AR54 (BR53)", block: "B: HBP", title: "Biliary Tract" },
+      { code: "AR55 (BR54)", block: "B: HBP", title: "Pancreas" },
+      { code: "AR56 (BR55)", block: "B: Breast", title: "Breast" },
+      { code: "AR57 (BR56)", block: "B: Endocrine", title: "Endocrine" },
+      { code: "AR58 (BR57)", block: "B: Endocrine", title: "Thyroid Gland" },
+      { code: "AR59 (BR58)", block: "B: Endocrine", title: "Parathyroid" },
+      { code: "AR60 (BR59)", block: "B: HBP", title: "Spleen and Splenectomy" },
+      { code: "AR61 (BR60)", block: "B: Vascular", title: "Surgically Correctable HTN" },
+      { code: "AR62 (BR61)", block: "B: Plastic", title: "Soft Tissue Sarcomas and Lymphomas" },
+      { code: "AR63 (BR62)", block: "B: Plastic", title: "Skin Lesions" },
+      { code: "AR64 (BR63)", block: "B: Plastic", title: "Melanoma" },
+      { code: "AR65 (BR64)", block: "B: Misc", title: "Surgical Intensive Care" },
+      { code: "AR66 (BR65)", block: "B: Vascular", title: "Vascular Surgery" },
+      { code: "AR67 (BR66)", block: "B: Ped", title: "Pediatric Surgery" },
+      { code: "AR68 (BR67)", block: "B: Plastic", title: "Plastic Surgery" },
+      { code: "AR69 (BR68)", block: "B: ENT", title: "Hand Surgery" },
+      { code: "AR70 (BR69)", block: "B: ENT", title: "Otolaryngology: Head and Neck Surgery" },
+      { code: "AR71 (BR70)", block: "B: CTS", title: "Thoracic Surgery" },
+      { code: "AR72 (BR71)", block: "B: CTS", title: "Cardiovascular Surgery" },
+      { code: "AR73 (BR72)", block: "B: Misc", title: "Transplant Surgery" },
+      { code: "AR74 (BR73)", block: "B: Ortho", title: "Orthopaedic Surgery" },
+      { code: "AR75 (BR74)", block: "B: NSG", title: "Neurosurgery" },
+      { code: "AR76 (BR75)", block: "B: Urology", title: "Urology" }
     ];
 
     let shownLectures = [];
@@ -1293,8 +1213,7 @@
     function getLectureType(code) {
       if (code.startsWith('GC')) return 'GC';
       if (code.startsWith('SS')) return 'SS';
-      if (code.startsWith('AR')) return 'AR';
-      if (code.startsWith('BR')) return 'BR';
+      if (code.startsWith('AR') || code.startsWith('BR')) return 'Recall';
       return '';
     }
 
@@ -1336,7 +1255,7 @@
       // Check lecture types
       const typeCheckboxes = document.querySelectorAll('input[name="type"]:checked');
       if (typeCheckboxes.length === 0) {
-        alert("Please select at least one lecture type (GC, SS, AR, or BR).");
+        alert("Please select at least one lecture type (GC, SS, or Recall).");
         return;
       }
 
