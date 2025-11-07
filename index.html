@@ -5,70 +5,120 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Random Surgery Lecture Generator</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
+    * {
       margin: 0;
-      background-color: #f9f9f9;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     h1 {
-      margin-top: 20px;
-      font-size: 28px;
-      color: #333;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      font-weight: 300;
+      opacity: 0.95;
+    }
+
+    .main-content {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      padding: 40px;
+      margin: -30px auto 40px;
+      max-width: 1000px;
+      position: relative;
+      z-index: 1;
     }
 
     .instruction {
-      font-size: 16px;
-      color: #666;
-      margin-bottom: 15px;
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 500;
     }
 
     .control-buttons {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
+      flex-wrap: wrap;
     }
 
     .control-buttons button {
-      padding: 8px 20px;
-      font-size: 14px;
-      background-color: #546e7a;
+      padding: 10px 25px;
+      font-size: 15px;
+      background-color: #667eea;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     }
 
     .control-buttons button:hover {
-      background-color: #37474f;
+      background-color: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
 
     .checkbox-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     .checkbox-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(180px, 1fr));
-      gap: 10px;
-      padding: 20px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 600px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-width: 800px;
     }
 
     .checkbox-item {
-      text-align: left;
-      display: flex;
-      align-items: center;
-      padding: 5px;
+      background-color: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      padding: 12px 15px;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-item:hover {
+      background-color: #e7f3ff;
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
     }
 
     .checkbox-item label {
@@ -77,55 +127,67 @@
       display: flex;
       align-items: center;
       width: 100%;
-    }
-
-    .checkbox-item label:hover {
-      color: #00796b;
+      font-weight: 500;
+      color: #333;
     }
 
     input[type="checkbox"] {
-      margin-right: 8px;
+      margin-right: 10px;
       cursor: pointer;
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       flex-shrink: 0;
+      accent-color: #667eea;
+    }
+
+    .button-group {
+      text-align: center;
+      margin: 40px 0 30px;
     }
 
     .generate-button {
-      margin-top: 30px;
-      padding: 12px 35px;
-      font-size: 18px;
-      background-color: #00796b;
+      padding: 15px 50px;
+      font-size: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 50px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .generate-button:hover {
-      background-color: #004d40;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
     }
 
     .generate-button:active {
-      transform: scale(0.98);
+      transform: translateY(-1px);
     }
 
     .reset-button {
-      margin-top: 10px;
-      padding: 8px 20px;
+      margin-top: 15px;
+      padding: 10px 30px;
       font-size: 14px;
-      background-color: #ff6b6b;
+      background-color: #e74c3c;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 25px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s ease;
       display: none;
+      font-weight: 500;
+      box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
     }
 
     .reset-button:hover {
-      background-color: #ff5252;
+      background-color: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
     }
 
     .reset-button.show {
@@ -133,57 +195,71 @@
     }
 
     #result {
-      margin-top: 30px;
-      padding: 25px;
-      min-height: 60px;
+      margin: 40px 0;
+      padding: 30px;
+      min-height: 100px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+      border-radius: 15px;
     }
 
     .lecture-code {
-      font-size: 32px;
-      font-weight: bold;
-      color: #00796b;
-      margin-bottom: 15px;
-      padding: 10px 20px;
-      background-color: #e0f7fa;
-      border-radius: 10px;
-      display: inline-block;
+      font-size: 42px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      padding: 15px 30px;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      -webkit-text-fill-color: #667eea;
     }
 
     .lecture-title {
-      font-size: 20px;
-      color: #333;
+      font-size: 22px;
+      color: #2c3e50;
       max-width: 800px;
-      line-height: 1.5;
-      padding: 15px;
-      background-color: #fff;
-      border-left: 4px solid #00796b;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      line-height: 1.6;
+      padding: 20px 30px;
+      background-color: white;
+      border-left: 5px solid #667eea;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       text-align: left;
+      border-radius: 8px;
+      font-weight: 500;
     }
 
     .no-result {
-      color: #999;
+      color: #95a5a6;
       font-style: italic;
       font-size: 18px;
     }
 
     .counter {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #666;
+      margin-top: 25px;
+      font-size: 16px;
+      color: #7f8c8d;
+      text-align: center;
+      font-weight: 600;
+      padding: 12px 25px;
+      background-color: #f8f9fa;
+      border-radius: 25px;
+      display: inline-block;
     }
 
     .history-section {
-      margin-top: 40px;
-      padding: 20px;
+      margin-top: 50px;
+      padding: 30px;
       background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 900px;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      max-width: 1000px;
       margin-left: auto;
       margin-right: auto;
       display: none;
@@ -194,80 +270,166 @@
     }
 
     .history-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #00796b;
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 3px solid #667eea;
+      text-align: center;
     }
 
     .history-list {
-      text-align: left;
-      max-height: 400px;
+      max-height: 500px;
       overflow-y: auto;
     }
 
+    .history-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .history-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .history-list::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+
+    .history-list::-webkit-scrollbar-thumb:hover {
+      background: #5568d3;
+    }
+
     .history-item {
-      padding: 10px;
-      margin: 5px 0;
-      background-color: #f5f5f5;
-      border-radius: 5px;
-      border-left: 3px solid #00796b;
+      padding: 15px;
+      margin: 10px 0;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
       display: flex;
       align-items: center;
       gap: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .history-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
     }
 
     .history-item-number {
-      font-weight: bold;
-      color: #00796b;
-      min-width: 30px;
+      font-weight: 700;
+      color: #667eea;
+      min-width: 35px;
+      font-size: 18px;
     }
 
     .history-item-code {
-      font-weight: bold;
-      color: #00796b;
-      min-width: 60px;
+      font-weight: 700;
+      color: #764ba2;
+      min-width: 70px;
+      font-size: 16px;
     }
 
     .history-item-block {
-      color: #666;
+      color: #7f8c8d;
       font-size: 14px;
-      min-width: 100px;
+      min-width: 110px;
+      font-weight: 600;
     }
 
     .history-item-title {
       flex-grow: 1;
-      color: #333;
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    /* Footer Styles */
+    footer {
+      margin-top: 80px;
+      padding: 40px 20px 30px;
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .disclaimer {
-      margin-top: 40px;
-      font-size: 12px;
-      color: #999;
-      font-style: italic;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      font-weight: 300;
     }
 
-    .footer {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #666;
+    .footer-divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      margin: 25px auto;
+    }
+
+    .footer-text {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-text a {
+      color: #667eea;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-text a:hover {
+      color: #764ba2;
     }
 
     @media (max-width: 768px) {
-      .checkbox-grid {
-        grid-template-columns: repeat(2, 1fr);
+      h1 {
+        font-size: 28px;
       }
-      
+
+      .subtitle {
+        font-size: 16px;
+      }
+
+      .main-content {
+        padding: 25px 20px;
+        margin: -20px 15px 30px;
+      }
+
+      .checkbox-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+      }
+
+      .lecture-code {
+        font-size: 32px;
+      }
+
       .lecture-title {
         font-size: 18px;
+        padding: 15px 20px;
       }
 
       .history-item {
         flex-direction: column;
-        gap: 5px;
+        gap: 8px;
         align-items: flex-start;
+        padding: 12px;
+      }
+
+      .generate-button {
+        font-size: 18px;
+        padding: 12px 40px;
       }
     }
 
@@ -275,83 +437,101 @@
       .checkbox-grid {
         grid-template-columns: 1fr;
       }
-      
-      .lecture-code {
-        font-size: 28px;
+
+      .control-buttons {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .control-buttons button {
+        width: 100%;
+        max-width: 300px;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>Random Surgery Lecture Generator</h1>
-  <p class="instruction">Select the blocks you want to quiz from:</p>
+  <header>
+    <h1>🏥 Surgery Lecture Generator</h1>
+    <p class="subtitle">Your personalized study companion for medical lectures</p>
+  </header>
 
-  <div class="control-buttons">
-    <button onclick="selectAll()">Select All</button>
-    <button onclick="deselectAll()">Deselect All</button>
-  </div>
+  <div class="container">
+    <div class="main-content">
+      <p class="instruction">📚 Select the blocks you want to study from:</p>
 
-  <div class="checkbox-container">
-    <div class="checkbox-grid">
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: NSG"> B: NSG</label>
+      <div class="control-buttons">
+        <button onclick="selectAll()">✓ Select All</button>
+        <button onclick="deselectAll()">✗ Deselect All</button>
       </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Vascular"> B: Vascular</label>
+
+      <div class="checkbox-container">
+        <div class="checkbox-grid">
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: NSG"> NSG</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Vascular"> Vascular</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Trauma"> Trauma</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: HBP"> HBP</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Endocrine"> Endocrine</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Plastic"> Plastic</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Lower GI"> Lower GI</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Urology"> Urology</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Breast"> Breast</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Upper GI"> Upper GI</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: ENT"> ENT</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: CTS"> CTS</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Ortho"> Ortho</label>
+          </div>
+          <div class="checkbox-item">
+            <label><input type="checkbox" name="block" value="B: Ped"> Ped</label>
+          </div>
+        </div>
       </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Trauma"> B: Trauma</label>
+
+      <div class="button-group">
+        <button class="generate-button" onclick="generateLecture()">🎲 Generate Lecture</button>
+        <br>
+        <button class="reset-button" id="resetBtn" onclick="resetProgress()">🔄 Reset Progress</button>
       </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: HBP"> B: HBP</label>
+
+      <div id="result">
+        <div class="no-result">Select blocks and click Generate to see a random lecture</div>
       </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Endocrine"> B: Endocrine</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Plastic"> B: Plastic</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Lower GI"> B: Lower GI</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Urology"> B: Urology</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Breast"> B: Breast</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Upper GI"> B: Upper GI</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: ENT"> B: ENT</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: CTS"> B: CTS</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Ortho"> B: Ortho</label>
-      </div>
-      <div class="checkbox-item">
-        <label><input type="checkbox" name="block" value="B: Ped"> B: Ped</label>
+
+      <div style="text-align: center;">
+        <div class="counter" id="counter"></div>
       </div>
     </div>
-  </div>
 
-  <button class="generate-button" onclick="generateLecture()">Generate Lecture</button>
-  <br>
-  <button class="reset-button" id="resetBtn" onclick="resetProgress()">Reset Progress</button>
-
-  <div id="result">
-    <div class="no-result">Select blocks and click Generate to see a random lecture</div>
-  </div>
-
-  <div class="counter" id="counter"></div>
-
-  <div class="history-section" id="historySection">
-    <div class="history-title">Lectures Viewed</div>
-    <div class="history-list" id="historyList"></div>
+    <div class="history-section" id="historySection">
+      <div class="history-title">📋 Lectures Viewed</div>
+      <div class="history-list" id="historyList"></div>
+    </div>
   </div>
 
   <script>
@@ -521,27 +701,22 @@
         return;
       }
 
-      // Filter out already shown lectures
       const availableLectures = currentFilteredLectures.filter(lec => !shownLectures.includes(lec.code));
 
       let randomLecture;
       
       if (availableLectures.length === 0) {
-        // All lectures have been shown
         alert("🎉 Congratulations! You have gone through every lecture in the selected blocks. The list will now reset.");
         shownLectures = [];
         shownLectureDetails = [];
         document.getElementById('resetBtn').classList.remove('show');
         document.getElementById('historySection').classList.remove('show');
         document.getElementById('historyList').innerHTML = '';
-        // Get a random lecture from the full filtered list
         randomLecture = currentFilteredLectures[Math.floor(Math.random() * currentFilteredLectures.length)];
       } else {
-        // Get a random lecture from available ones
         randomLecture = availableLectures[Math.floor(Math.random() * availableLectures.length)];
       }
 
-      // Add to shown lectures
       shownLectures.push(randomLecture.code);
       shownLectureDetails.push({
         code: randomLecture.code,
@@ -549,18 +724,26 @@
         title: randomLecture.title
       });
 
-      // Display the lecture
       document.getElementById("result").innerHTML = `
         <div class="lecture-code">${randomLecture.code}</div>
         <div class="lecture-title">${randomLecture.title}</div>
       `;
 
-      // Update counter and history
       updateCounter();
       updateHistoryDisplay();
     }
   </script>
-  <p class="disclaimer">*Random Surgery Lecture Generator is for entertainment only and does not constitute medical advice. Consult a healthcare professional for health concerns.</p>
-  <p class="footer">&copy; 2025 - Branson Lau</p>
+
+  <footer>
+    <div class="footer-content">
+      <p class="disclaimer">
+        This Random Surgery Lecture Generator is for educational purposes only and does not constitute medical advice.<br>
+        Please consult a qualified healthcare professional for any health concerns.
+      </p>
+      <div class="footer-divider"></div>
+      <p class="footer-text">&copy; 2025 Branson Lau. All rights reserved.</p>
+    </div>
+  </footer>
+
 </body>
 </html>
