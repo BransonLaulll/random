@@ -78,27 +78,47 @@
     }
 
     .control-buttons button {
-      padding: 10px 25px;
+      padding: 12px 28px;
       font-size: 14px;
-      background-color: #667eea;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s ease;
-      font-weight: 500;
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-      min-width: 130px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      min-width: 140px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .control-buttons button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .control-buttons button:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .control-buttons button:hover {
-      background-color: #5568d3;
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
 
     .control-buttons button:active {
       transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
     }
 
     .checkbox-container {
@@ -115,39 +135,86 @@
       max-width: 700px;
     }
 
+    /* IMPROVED CHECKBOX ITEM - Now fully clickable */
     .checkbox-item {
+      position: relative;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .checkbox-item label {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
       background-color: #f8f9fa;
       border: 2px solid #e9ecef;
       border-radius: 8px;
-      padding: 12px 15px;
-      transition: all 0.3s ease;
+      font-size: 15px;
+      font-weight: 500;
+      color: #333;
       cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      position: relative;
     }
 
-    .checkbox-item:hover {
+    .checkbox-item label::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border: 2px solid #667eea;
+      border-radius: 4px;
+      margin-right: 10px;
+      flex-shrink: 0;
+      background-color: white;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .checkbox-item label::after {
+      content: '✓';
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%) scale(0);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + label::before {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #667eea;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + label::after {
+      transform: translateY(-50%) scale(1);
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + label {
+      background-color: #e7f3ff;
+      border-color: #667eea;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .checkbox-item:hover label {
       background-color: #e7f3ff;
       border-color: #667eea;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
     }
 
-    .checkbox-item label {
-      font-size: 15px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      font-weight: 500;
-      color: #333;
-    }
-
-    input[type="checkbox"] {
-      margin-right: 10px;
-      cursor: pointer;
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      accent-color: #667eea;
+    .checkbox-item input[type="checkbox"]:active + label {
+      transform: scale(0.98);
     }
 
     .button-group {
@@ -156,7 +223,7 @@
     }
 
     .generate-button {
-      padding: 14px 45px;
+      padding: 16px 50px;
       font-size: 18px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
@@ -164,46 +231,82 @@
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.3s ease;
-      font-weight: 600;
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      font-weight: 700;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       width: 100%;
-      max-width: 350px;
+      max-width: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .generate-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .generate-button:hover::before {
+      left: 100%;
     }
 
     .generate-button:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
     }
 
     .generate-button:active {
-      transform: translateY(-1px);
+      transform: translateY(-1px) scale(0.98);
     }
 
     .reset-button {
-      margin-top: 12px;
-      padding: 10px 30px;
+      margin-top: 15px;
+      padding: 12px 35px;
       font-size: 13px;
-      background-color: #e74c3c;
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       color: white;
       border: none;
       border-radius: 25px;
       cursor: pointer;
       transition: all 0.3s ease;
       display: none;
-      font-weight: 500;
-      box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reset-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+    }
+
+    .reset-button:hover::before {
+      width: 200px;
+      height: 200px;
     }
 
     .reset-button:hover {
-      background-color: #c0392b;
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
     }
 
     .reset-button:active {
-      transform: translateY(0);
+      transform: translateY(0) scale(0.98);
     }
 
     .reset-button.show {
@@ -457,7 +560,7 @@
       .control-buttons button {
         flex: 1;
         min-width: 110px;
-        padding: 10px 15px;
+        padding: 12px 20px;
         font-size: 13px;
       }
 
@@ -467,18 +570,19 @@
         max-width: 100%;
       }
 
-      .checkbox-item {
-        padding: 10px 12px;
-      }
-
       .checkbox-item label {
+        padding: 10px 12px;
         font-size: 14px;
       }
 
-      input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-        margin-right: 8px;
+      .checkbox-item label::before {
+        width: 18px;
+        height: 18px;
+      }
+
+      .checkbox-item label::after {
+        left: 17px;
+        font-size: 12px;
       }
 
       .button-group {
@@ -487,15 +591,15 @@
 
       .generate-button {
         font-size: 15px;
-        padding: 12px 35px;
+        padding: 14px 35px;
         max-width: 100%;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
       }
 
       .reset-button {
-        padding: 9px 25px;
+        padding: 10px 25px;
         font-size: 12px;
-        margin-top: 10px;
+        margin-top: 12px;
       }
 
       #result {
@@ -614,7 +718,7 @@
       .control-buttons button {
         width: 100%;
         min-width: auto;
-        padding: 10px;
+        padding: 12px;
       }
 
       .checkbox-grid {
@@ -622,13 +726,13 @@
         gap: 6px;
       }
 
-      .checkbox-item {
+      .checkbox-item label {
         padding: 12px;
       }
 
       .generate-button {
         font-size: 14px;
-        padding: 11px 30px;
+        padding: 13px 30px;
       }
 
       .lecture-code {
@@ -653,16 +757,16 @@
         min-height: 44px;
       }
 
-      .checkbox-item {
+      .checkbox-item label {
         min-height: 44px;
       }
 
       .generate-button {
-        min-height: 48px;
+        min-height: 50px;
       }
 
       .reset-button {
-        min-height: 40px;
+        min-height: 42px;
       }
     }
   </style>
@@ -686,46 +790,60 @@
       <div class="checkbox-container">
         <div class="checkbox-grid">
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: NSG"> NSG</label>
+            <input type="checkbox" id="nsg" name="block" value="B: NSG">
+            <label for="nsg">NSG</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Vascular"> Vascular</label>
+            <input type="checkbox" id="vascular" name="block" value="B: Vascular">
+            <label for="vascular">Vascular</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Trauma"> Trauma</label>
+            <input type="checkbox" id="trauma" name="block" value="B: Trauma">
+            <label for="trauma">Trauma</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: HBP"> HBP</label>
+            <input type="checkbox" id="hbp" name="block" value="B: HBP">
+            <label for="hbp">HBP</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Endocrine"> Endocrine</label>
+            <input type="checkbox" id="endocrine" name="block" value="B: Endocrine">
+            <label for="endocrine">Endocrine</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Plastic"> Plastic</label>
+            <input type="checkbox" id="plastic" name="block" value="B: Plastic">
+            <label for="plastic">Plastic</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Lower GI"> Lower GI</label>
+            <input type="checkbox" id="lowergi" name="block" value="B: Lower GI">
+            <label for="lowergi">Lower GI</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Urology"> Urology</label>
+            <input type="checkbox" id="urology" name="block" value="B: Urology">
+            <label for="urology">Urology</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Breast"> Breast</label>
+            <input type="checkbox" id="breast" name="block" value="B: Breast">
+            <label for="breast">Breast</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Upper GI"> Upper GI</label>
+            <input type="checkbox" id="uppergi" name="block" value="B: Upper GI">
+            <label for="uppergi">Upper GI</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: ENT"> ENT</label>
+            <input type="checkbox" id="ent" name="block" value="B: ENT">
+            <label for="ent">ENT</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: CTS"> CTS</label>
+            <input type="checkbox" id="cts" name="block" value="B: CTS">
+            <label for="cts">CTS</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Ortho"> Ortho</label>
+            <input type="checkbox" id="ortho" name="block" value="B: Ortho">
+            <label for="ortho">Ortho</label>
           </div>
           <div class="checkbox-item">
-            <label><input type="checkbox" name="block" value="B: Ped"> Ped</label>
+            <input type="checkbox" id="ped" name="block" value="B: Ped">
+            <label for="ped">Ped</label>
           </div>
         </div>
       </div>
@@ -769,7 +887,7 @@
       { code: "GC180", block: "B: Urology", title: "Benign prostatic hyperplasia, bladder outlet obstruction and urinary retention" },
       { code: "GC181", block: "B: Breast", title: "Breast mass: breast cancer; benign breast diseases; mammography; breast cancer screening" },
       { code: "GC182", block: "B: Trauma", title: "Chopped and stabbed wound in gang fight: Nerves and vascular injury; Classification of injuries" },
-      { code: "GC183", block: "B: Urology", title: "Common urologic malignancies and their presentations" },
+      { code: "GC183", block: "B: Urology", title: "Common urologic malignalities and their presentations" },
       { code: "GC184", block: "B: Urology", title: "Erection and erectile dysfunction" },
       { code: "GC185", block: "B: Upper GI", title: "Feed him up before surgery: Surgical nutrition, Enteral and parenteral feeding" },
       { code: "GC186", block: "B: Lower GI", title: "Fresh blood in stool: lower GI bleeding" },
