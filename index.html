@@ -63,6 +63,7 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
     .main-content::-webkit-scrollbar {
@@ -83,12 +84,71 @@
       background: #5568d3;
     }
 
-    .instruction {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 12px;
-      text-align: center;
+    /* Info Button */
+    .info-button-container {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+    }
+
+    .info-button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: help;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .info-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+    }
+
+    .info-tooltip {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
       font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .info-tooltip::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      right: 12px;
+      width: 12px;
+      height: 12px;
+      background: #667eea;
+      transform: rotate(45deg);
+    }
+
+    .info-button:hover .info-tooltip {
+      opacity: 1;
+      visibility: visible;
+      top: 45px;
     }
 
     .section-divider {
@@ -588,6 +648,20 @@
         position: relative;
         max-height: 400px;
       }
+
+      .info-tooltip {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: normal;
+        max-width: 280px;
+        text-align: center;
+      }
+
+      .info-tooltip::before {
+        left: 50%;
+        transform: translateX(-50%) rotate(45deg);
+      }
     }
 
     @media (max-width: 768px) {
@@ -610,12 +684,8 @@
 
       .main-content {
         padding: 20px 15px;
+        padding-top: 50px;
         border-radius: 12px;
-      }
-
-      .instruction {
-        font-size: 14px;
-        margin-bottom: 15px;
       }
 
       .control-buttons {
@@ -779,6 +849,7 @@
 
       .main-content {
         padding: 18px 12px;
+        padding-top: 50px;
       }
 
       .control-buttons {
@@ -848,6 +919,19 @@
       .reset-button {
         min-height: 42px;
       }
+
+      .info-button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      /* Show tooltip on tap for touch devices */
+      .info-button:active .info-tooltip {
+        opacity: 1;
+        visibility: visible;
+        top: 50px;
+      }
     }
   </style>
 </head>
@@ -860,7 +944,13 @@
 
   <div class="desktop-container">
     <div class="main-content">
-      <p class="instruction">📚 Select lecture types and blocks you want to study from:</p>
+      <!-- Info Button -->
+      <div class="info-button-container">
+        <button class="info-button" type="button">
+          ℹ️
+          <div class="info-tooltip">📚 Select lecture types and blocks you want to study from</div>
+        </button>
+      </div>
 
       <!-- LECTURE TYPE SECTION -->
       <div class="section-divider">
