@@ -74,7 +74,7 @@
     }
 
     .control-buttons button {
-      padding: 10px 25px;
+      padding: 12px 30px;
       font-size: 15px;
       background-color: #667eea;
       color: white;
@@ -84,12 +84,17 @@
       transition: all 0.3s ease;
       font-weight: 500;
       box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+      min-width: 140px;
     }
 
     .control-buttons button:hover {
       background-color: #5568d3;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .control-buttons button:active {
+      transform: translateY(0);
     }
 
     .checkbox-container {
@@ -110,8 +115,9 @@
       background-color: #f8f9fa;
       border: 2px solid #e9ecef;
       border-radius: 10px;
-      padding: 12px 15px;
+      padding: 15px 18px;
       transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .checkbox-item:hover {
@@ -132,10 +138,10 @@
     }
 
     input[type="checkbox"] {
-      margin-right: 10px;
+      margin-right: 12px;
       cursor: pointer;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
       accent-color: #667eea;
     }
@@ -146,7 +152,7 @@
     }
 
     .generate-button {
-      padding: 15px 50px;
+      padding: 16px 50px;
       font-size: 20px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
@@ -158,6 +164,8 @@
       box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
       text-transform: uppercase;
       letter-spacing: 1px;
+      width: 100%;
+      max-width: 400px;
     }
 
     .generate-button:hover {
@@ -171,7 +179,7 @@
 
     .reset-button {
       margin-top: 15px;
-      padding: 10px 30px;
+      padding: 12px 35px;
       font-size: 14px;
       background-color: #e74c3c;
       color: white;
@@ -188,6 +196,10 @@
       background-color: #c0392b;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    }
+
+    .reset-button:active {
+      transform: translateY(0);
     }
 
     .reset-button.show {
@@ -209,16 +221,12 @@
     .lecture-code {
       font-size: 42px;
       font-weight: 800;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #667eea;
       margin-bottom: 20px;
       padding: 15px 30px;
       background-color: white;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      -webkit-text-fill-color: #667eea;
     }
 
     .lecture-title {
@@ -233,6 +241,7 @@
       text-align: left;
       border-radius: 8px;
       font-weight: 500;
+      width: 100%;
     }
 
     .no-result {
@@ -382,70 +391,255 @@
       letter-spacing: 0.5px;
     }
 
-    .footer-text a {
-      color: #667eea;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .footer-text a:hover {
-      color: #764ba2;
-    }
-
+    /* ========== MOBILE IMPROVEMENTS ========== */
+    
     @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      header {
+        padding: 30px 15px 25px;
+      }
+
       h1 {
-        font-size: 28px;
+        font-size: 26px;
+        margin-bottom: 8px;
       }
 
       .subtitle {
-        font-size: 16px;
+        font-size: 14px;
       }
 
       .main-content {
-        padding: 25px 20px;
-        margin: -20px 15px 30px;
+        padding: 25px 18px;
+        margin: -20px 10px 30px;
+        border-radius: 12px;
+      }
+
+      .instruction {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .control-buttons {
+        gap: 10px;
+        margin-bottom: 25px;
+      }
+
+      .control-buttons button {
+        flex: 1;
+        min-width: 120px;
+        padding: 12px 20px;
+        font-size: 14px;
       }
 
       .checkbox-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
 
+      .checkbox-item {
+        padding: 12px 15px;
+      }
+
+      .checkbox-item label {
+        font-size: 15px;
+      }
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+      }
+
+      .button-group {
+        margin: 30px 0 25px;
+      }
+
+      .generate-button {
+        font-size: 16px;
+        padding: 14px 40px;
+        width: 100%;
+      }
+
+      .reset-button {
+        padding: 10px 25px;
+        font-size: 13px;
+      }
+
+      #result {
+        margin: 30px 0;
+        padding: 20px 15px;
+      }
+
       .lecture-code {
-        font-size: 32px;
+        font-size: 28px;
+        padding: 12px 20px;
+        margin-bottom: 15px;
       }
 
       .lecture-title {
-        font-size: 18px;
-        padding: 15px 20px;
+        font-size: 16px;
+        padding: 15px 18px;
+        line-height: 1.5;
+      }
+
+      .no-result {
+        font-size: 15px;
+        padding: 10px;
+      }
+
+      .counter {
+        font-size: 14px;
+        padding: 10px 20px;
+        margin-top: 20px;
+      }
+
+      .history-section {
+        margin-top: 30px;
+        padding: 20px 15px;
+      }
+
+      .history-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+        padding-bottom: 12px;
+      }
+
+      .history-list {
+        max-height: 400px;
       }
 
       .history-item {
         flex-direction: column;
-        gap: 8px;
         align-items: flex-start;
+        gap: 8px;
         padding: 12px;
+        margin: 8px 0;
       }
 
-      .generate-button {
-        font-size: 18px;
-        padding: 12px 40px;
+      .history-item:hover {
+        transform: none;
+      }
+
+      .history-item-number {
+        font-size: 16px;
+        min-width: auto;
+      }
+
+      .history-item-code {
+        font-size: 15px;
+        min-width: auto;
+      }
+
+      .history-item-block {
+        font-size: 13px;
+        min-width: auto;
+      }
+
+      .history-item-title {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      footer {
+        margin-top: 50px;
+        padding: 30px 20px 25px;
+      }
+
+      .disclaimer {
+        font-size: 12px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .footer-divider {
+        margin: 20px auto;
+      }
+
+      .footer-text {
+        font-size: 13px;
       }
     }
 
     @media (max-width: 480px) {
-      .checkbox-grid {
-        grid-template-columns: 1fr;
+      h1 {
+        font-size: 22px;
+      }
+
+      .subtitle {
+        font-size: 13px;
+      }
+
+      .main-content {
+        padding: 20px 15px;
+      }
+
+      .instruction {
+        font-size: 15px;
       }
 
       .control-buttons {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
       }
 
       .control-buttons button {
         width: 100%;
-        max-width: 300px;
+        min-width: auto;
+      }
+
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .checkbox-item {
+        padding: 14px 15px;
+      }
+
+      .generate-button {
+        font-size: 15px;
+        padding: 13px 30px;
+        letter-spacing: 0.5px;
+      }
+
+      .lecture-code {
+        font-size: 24px;
+        padding: 10px 18px;
+      }
+
+      .lecture-title {
+        font-size: 15px;
+        padding: 12px 15px;
+      }
+
+      .history-item {
+        padding: 10px;
+      }
+
+      .disclaimer {
+        font-size: 11px;
+      }
+    }
+
+    /* Touch devices - larger touch targets */
+    @media (hover: none) and (pointer: coarse) {
+      .control-buttons button {
+        min-height: 44px;
+      }
+
+      .checkbox-item {
+        min-height: 44px;
+      }
+
+      .generate-button {
+        min-height: 50px;
+      }
+
+      .reset-button {
+        min-height: 44px;
       }
     }
   </style>
@@ -454,7 +648,7 @@
 
   <header>
     <h1>🏥 Surgery Lecture Generator</h1>
-    <p class="subtitle">Your personalized study companion for medical lectures</p>
+    <p class="subtitle">Your personalized study companion</p>
   </header>
 
   <div class="container">
