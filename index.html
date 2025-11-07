@@ -14,72 +14,94 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      min-height: 100vh;
-      padding: 0;
-      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     header {
       text-align: center;
-      padding: 30px 20px 25px;
+      padding: 20px 20px 18px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      flex-shrink: 0;
     }
 
     h1 {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
     }
 
     .subtitle {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 300;
       opacity: 0.95;
     }
 
     /* DESKTOP LAYOUT - Two Column */
     .desktop-container {
+      flex: 1;
       max-width: 1400px;
+      width: 100%;
       margin: 0 auto;
-      padding: 20px;
+      padding: 15px;
       display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 20px;
-      align-items: start;
+      grid-template-columns: 1fr 380px;
+      gap: 15px;
+      overflow: hidden;
     }
 
     .main-content {
       background-color: white;
       border-radius: 15px;
       box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      padding: 30px;
-      margin-top: -30px;
-      position: relative;
-      z-index: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .main-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .main-content::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+
+    .main-content::-webkit-scrollbar-thumb:hover {
+      background: #5568d3;
     }
 
     .instruction {
-      font-size: 16px;
+      font-size: 15px;
       color: #555;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-align: center;
       font-weight: 500;
     }
 
     .control-buttons {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       display: flex;
       justify-content: center;
-      gap: 15px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .control-buttons button {
-      padding: 12px 28px;
-      font-size: 14px;
+      padding: 10px 24px;
+      font-size: 13px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
@@ -88,7 +110,7 @@
       transition: all 0.3s ease;
       font-weight: 600;
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-      min-width: 140px;
+      min-width: 130px;
       position: relative;
       overflow: hidden;
     }
@@ -124,18 +146,17 @@
     .checkbox-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .checkbox-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
       width: 100%;
       max-width: 700px;
     }
 
-    /* IMPROVED CHECKBOX ITEM - Now fully clickable */
     .checkbox-item {
       position: relative;
     }
@@ -152,11 +173,11 @@
     .checkbox-item label {
       display: flex;
       align-items: center;
-      padding: 12px 15px;
+      padding: 10px 12px;
       background-color: #f8f9fa;
       border: 2px solid #e9ecef;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
       color: #333;
       cursor: pointer;
@@ -167,11 +188,11 @@
 
     .checkbox-item label::before {
       content: '';
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border: 2px solid #667eea;
       border-radius: 4px;
-      margin-right: 10px;
+      margin-right: 8px;
       flex-shrink: 0;
       background-color: white;
       transition: all 0.3s ease;
@@ -181,11 +202,11 @@
     .checkbox-item label::after {
       content: '✓';
       position: absolute;
-      left: 18px;
+      left: 15px;
       top: 50%;
       transform: translateY(-50%) scale(0);
       color: white;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
       transition: transform 0.2s ease;
     }
@@ -219,12 +240,12 @@
 
     .button-group {
       text-align: center;
-      margin: 25px 0 20px;
+      margin: 18px 0 15px;
     }
 
     .generate-button {
-      padding: 16px 50px;
-      font-size: 18px;
+      padding: 14px 45px;
+      font-size: 16px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
@@ -266,9 +287,9 @@
     }
 
     .reset-button {
-      margin-top: 15px;
-      padding: 12px 35px;
-      font-size: 13px;
+      margin-top: 12px;
+      padding: 10px 30px;
+      font-size: 12px;
       background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       color: white;
       border: none;
@@ -314,9 +335,9 @@
     }
 
     #result {
-      margin: 25px 0 15px;
-      padding: 25px;
-      min-height: 80px;
+      margin: 18px 0 12px;
+      padding: 20px;
+      min-height: 70px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -326,22 +347,22 @@
     }
 
     .lecture-code {
-      font-size: 36px;
+      font-size: 32px;
       font-weight: 800;
       color: #667eea;
-      margin-bottom: 15px;
-      padding: 12px 25px;
+      margin-bottom: 12px;
+      padding: 10px 22px;
       background-color: white;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .lecture-title {
-      font-size: 18px;
+      font-size: 16px;
       color: #2c3e50;
       max-width: 700px;
       line-height: 1.5;
-      padding: 15px 20px;
+      padding: 12px 18px;
       background-color: white;
       border-left: 5px solid #667eea;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
@@ -354,16 +375,16 @@
     .no-result {
       color: #95a5a6;
       font-style: italic;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .counter {
-      margin-top: 15px;
-      font-size: 14px;
+      margin-top: 12px;
+      font-size: 13px;
       color: #7f8c8d;
       text-align: center;
       font-weight: 600;
-      padding: 10px 20px;
+      padding: 8px 18px;
       background-color: #f8f9fa;
       border-radius: 25px;
       display: inline-block;
@@ -374,23 +395,21 @@
       background-color: white;
       border-radius: 15px;
       box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      padding: 25px;
-      margin-top: -30px;
-      position: sticky;
-      top: 20px;
-      max-height: calc(100vh - 40px);
+      padding: 20px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
     .history-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       color: #2c3e50;
-      margin-bottom: 15px;
-      padding-bottom: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 3px solid #667eea;
       text-align: center;
+      flex-shrink: 0;
     }
 
     .history-list {
@@ -417,8 +436,8 @@
     }
 
     .history-item {
-      padding: 12px;
-      margin: 8px 0;
+      padding: 10px;
+      margin: 6px 0;
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
       border-radius: 8px;
       border-left: 4px solid #667eea;
@@ -432,33 +451,33 @@
 
     .history-item-header {
       display: flex;
-      gap: 10px;
-      margin-bottom: 5px;
+      gap: 8px;
+      margin-bottom: 4px;
       align-items: center;
     }
 
     .history-item-number {
       font-weight: 700;
       color: #667eea;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .history-item-code {
       font-weight: 700;
       color: #764ba2;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .history-item-block {
       color: #7f8c8d;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
     }
 
     .history-item-title {
       color: #2c3e50;
       font-weight: 500;
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.4;
     }
 
@@ -467,16 +486,16 @@
       color: #95a5a6;
       font-style: italic;
       padding: 20px;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     /* Footer Styles */
     footer {
-      margin-top: 40px;
-      padding: 30px 20px 25px;
+      padding: 12px 20px;
       background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
       color: white;
       text-align: center;
+      flex-shrink: 0;
     }
 
     .footer-content {
@@ -485,10 +504,10 @@
     }
 
     .disclaimer {
-      font-size: 13px;
+      font-size: 10px;
       color: rgba(255, 255, 255, 0.8);
-      line-height: 1.6;
-      margin-bottom: 15px;
+      line-height: 1.4;
+      margin-bottom: 6px;
       font-weight: 300;
     }
 
@@ -496,11 +515,11 @@
       width: 60px;
       height: 2px;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-      margin: 20px auto;
+      margin: 8px auto;
     }
 
     .footer-text {
-      font-size: 14px;
+      font-size: 11px;
       color: rgba(255, 255, 255, 0.9);
       font-weight: 400;
       letter-spacing: 0.5px;
@@ -509,17 +528,26 @@
     /* ========== MOBILE LAYOUT ========== */
     
     @media (max-width: 1024px) {
+      body {
+        height: auto;
+        min-height: 100vh;
+        overflow: auto;
+      }
+
       .desktop-container {
         grid-template-columns: 1fr;
         gap: 15px;
         padding: 10px;
+        overflow: visible;
+      }
+
+      .main-content {
+        overflow-y: visible;
       }
 
       .history-sidebar {
         position: relative;
-        top: 0;
         max-height: 400px;
-        margin-top: 0;
       }
     }
 
@@ -543,7 +571,6 @@
 
       .main-content {
         padding: 20px 15px;
-        margin-top: -20px;
         border-radius: 12px;
       }
 
@@ -633,7 +660,6 @@
 
       .history-sidebar {
         padding: 18px;
-        margin-top: 15px;
         max-height: 300px;
       }
 
@@ -679,17 +705,17 @@
 
       footer {
         margin-top: 25px;
-        padding: 25px 15px 20px;
+        padding: 20px 15px;
       }
 
       .disclaimer {
         font-size: 11px;
         line-height: 1.5;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
       }
 
       .footer-divider {
-        margin: 15px auto;
+        margin: 12px auto;
       }
 
       .footer-text {
@@ -871,6 +897,16 @@
       </div>
     </div>
   </div>
+
+  <footer>
+    <div class="footer-content">
+      <p class="disclaimer">
+        This Random Surgery Lecture Generator is for educational purposes only and does not constitute medical advice. Please consult a qualified healthcare professional for any health concerns.
+      </p>
+      <div class="footer-divider"></div>
+      <p class="footer-text">&copy; 2025 Branson Lau. All rights reserved.</p>
+    </div>
+  </footer>
 
   <script>
     const lectures = [
@@ -1070,17 +1106,6 @@
       updateHistoryDisplay();
     }
   </script>
-
-  <footer>
-    <div class="footer-content">
-      <p class="disclaimer">
-        This Random Surgery Lecture Generator is for educational purposes only and does not constitute medical advice.<br>
-        Please consult a qualified healthcare professional for any health concerns.
-      </p>
-      <div class="footer-divider"></div>
-      <p class="footer-text">&copy; 2025 Branson Lau. All rights reserved.</p>
-    </div>
-  </footer>
 
 </body>
 </html>
