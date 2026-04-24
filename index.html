@@ -1,1424 +1,648 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Random Surgery Lecture Generator</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    header {
-      text-align: center;
-      padding: 15px 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      flex-shrink: 0;
-    }
-
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .subtitle {
-      font-size: 13px;
-      font-weight: 300;
-      opacity: 0.95;
-    }
-
-    /* DESKTOP LAYOUT - Two Column */
-    .desktop-container {
-      flex: 1;
-      max-width: 1400px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 12px;
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 12px;
-      overflow: hidden;
-    }
-
-    .main-content {
-      background-color: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    .main-content::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .main-content::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-
-    .main-content::-webkit-scrollbar-thumb {
-      background: #667eea;
-      border-radius: 10px;
-    }
-
-    .main-content::-webkit-scrollbar-thumb:hover {
-      background: #5568d3;
-    }
-
-    /* Info Button */
-    .info-button-container {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      z-index: 10;
-    }
-
-    .info-button {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: help;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .info-button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
-    }
-
-    .info-tooltip {
-      position: absolute;
-      top: 40px;
-      right: 0;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 500;
-      white-space: nowrap;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    .info-tooltip::before {
-      content: '';
-      position: absolute;
-      top: -6px;
-      right: 12px;
-      width: 12px;
-      height: 12px;
-      background: #667eea;
-      transform: rotate(45deg);
-    }
-
-    .info-button:hover .info-tooltip {
-      opacity: 1;
-      visibility: visible;
-      top: 45px;
-    }
-
-    .section-divider {
-      margin: 8px 0 10px;
-      text-align: center;
-      position: relative;
-    }
-
-    .section-divider::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
-    }
-
-    .section-divider span {
-      background: white;
-      padding: 0 15px;
-      color: #764ba2;
-      font-weight: 600;
-      font-size: 13px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .control-buttons {
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .control-buttons button {
-      padding: 8px 20px;
-      font-size: 12px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-      min-width: 120px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .control-buttons button::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    .control-buttons button:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .control-buttons button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .control-buttons button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    }
-
-    .checkbox-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-
-    .checkbox-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      width: 100%;
-      max-width: 600px;
-    }
-
-    .checkbox-grid.type-grid {
-      grid-template-columns: repeat(3, 1fr);
-      max-width: 600px;
-    }
-
-    .checkbox-item {
-      position: relative;
-    }
-
-    .checkbox-item input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      z-index: 2;
-    }
-
-    .checkbox-item label {
-      display: flex;
-      align-items: center;
-      padding: 8px 10px;
-      background-color: #f8f9fa;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #333;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      user-select: none;
-      position: relative;
-    }
-
-    .checkbox-item label::before {
-      content: '';
-      width: 16px;
-      height: 16px;
-      border: 2px solid #667eea;
-      border-radius: 4px;
-      margin-right: 8px;
-      flex-shrink: 0;
-      background-color: white;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .checkbox-item label::after {
-      content: '✓';
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%) scale(0);
-      color: white;
-      font-size: 11px;
-      font-weight: bold;
-      transition: transform 0.2s ease;
-    }
-
-    .checkbox-item input[type="checkbox"]:checked + label::before {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-color: #667eea;
-    }
-
-    .checkbox-item input[type="checkbox"]:checked + label::after {
-      transform: translateY(-50%) scale(1);
-    }
-
-    .checkbox-item input[type="checkbox"]:checked + label {
-      background-color: #e7f3ff;
-      border-color: #667eea;
-      color: #667eea;
-      font-weight: 600;
-    }
-
-    .checkbox-item:hover label {
-      background-color: #e7f3ff;
-      border-color: #667eea;
-      transform: translateY(-1px);
-      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.15);
-    }
-
-    .checkbox-item input[type="checkbox"]:active + label {
-      transform: scale(0.98);
-    }
-
-    .button-group {
-      text-align: center;
-      margin: 12px 0 10px;
-    }
-
-    .generate-button {
-      padding: 12px 40px;
-      font-size: 15px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 700;
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      width: 100%;
-      max-width: 350px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .generate-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.5s;
-    }
-
-    .generate-button:hover::before {
-      left: 100%;
-    }
-
-    .generate-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-    }
-
-    .generate-button:active {
-      transform: translateY(-1px) scale(0.98);
-    }
-
-    .reset-button {
-      margin-top: 8px;
-      padding: 8px 25px;
-      font-size: 11px;
-      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: none;
-      font-weight: 600;
-      box-shadow: 0 3px 12px rgba(231, 76, 60, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .reset-button::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.4s, height 0.4s;
-    }
-
-    .reset-button:hover::before {
-      width: 200px;
-      height: 200px;
-    }
-
-    .reset-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
-    }
-
-    .reset-button:active {
-      transform: translateY(0) scale(0.98);
-    }
-
-    .reset-button.show {
-      display: inline-block;
-    }
-
-    #result {
-      margin: 12px 0 10px;
-      padding: 24px 20px;
-      min-height: 140px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-      border-radius: 12px;
-      overflow: hidden;
-      gap: 4px;
-    }
-
-    .lecture-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .lecture-code {
-      font-size: 28px;
-      font-weight: 800;
-      color: #667eea;
-      padding: 8px 20px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-    }
-
-    .lecture-block {
-      font-size: 14px;
-      font-weight: 600;
-      color: #7f8c8d;
-      padding: 8px 16px;
-      background-color: #f8f9fa;
-      border-radius: 15px;
-      border: 2px solid #e9ecef;
-    }
-
-    .lecture-title {
-      font-size: 16px;
-      color: #2c3e50;
-      max-width: 700px;
-      line-height: 1.5;
-      padding: 12px 18px;
-      background-color: white;
-      border-left: 5px solid #667eea;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      text-align: left;
-      border-radius: 8px;
-      font-weight: 500;
-      width: 100%;
-    }
-
-    .no-result {
-      color: #95a5a6;
-      font-style: italic;
-      font-size: 15px;
-    }
-
-    .counter {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #7f8c8d;
-      text-align: center;
-      font-weight: 600;
-      padding: 6px 16px;
-      background-color: #f8f9fa;
-      border-radius: 20px;
-      display: inline-block;
-    }
-
-    /* HISTORY SIDEBAR - Desktop */
-    .history-sidebar {
-      background-color: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      padding: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .history-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: #2c3e50;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
-      border-bottom: 3px solid #667eea;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .history-list {
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .history-list::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .history-list::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-
-    .history-list::-webkit-scrollbar-thumb {
-      background: #667eea;
-      border-radius: 10px;
-    }
-
-    .history-list::-webkit-scrollbar-thumb:hover {
-      background: #5568d3;
-    }
-
-    .history-item {
-      padding: 8px;
-      margin: 5px 0;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border-radius: 8px;
-      border-left: 4px solid #667eea;
-    }
-
-    .history-item-header {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 4px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .history-item-number {
-      font-weight: 700;
-      color: #667eea;
-      font-size: 12px;
-    }
-
-    .history-item-code {
-      font-weight: 700;
-      color: #764ba2;
-      font-size: 12px;
-    }
-
-    .history-item-block {
-      color: #7f8c8d;
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .history-item-title {
-      color: #2c3e50;
-      font-weight: 500;
-      font-size: 11px;
-      line-height: 1.4;
-    }
-
-    .history-empty {
-      text-align: center;
-      color: #95a5a6;
-      font-style: italic;
-      padding: 20px;
-      font-size: 13px;
-    }
-
-    /* Footer Styles */
-    footer {
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-      color: white;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .footer-content {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .disclaimer {
-      font-size: 9px;
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.3;
-      margin-bottom: 5px;
-      font-weight: 300;
-    }
-
-    .footer-divider {
-      width: 50px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-      margin: 6px auto;
-    }
-
-    .footer-text {
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.9);
-      font-weight: 400;
-      letter-spacing: 0.5px;
-    }
-
-    /* ========== MOBILE LAYOUT ========== */
-    
-    @media (max-width: 1024px) {
-      body {
-        height: auto;
-        min-height: 100vh;
-        overflow: auto;
-      }
-
-      .desktop-container {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 10px;
-        overflow: visible;
-      }
-
-      .main-content {
-        overflow-y: visible;
-      }
-
-      .history-sidebar {
-        position: relative;
-        max-height: 400px;
-      }
-
-      .info-tooltip {
-        right: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: normal;
-        max-width: 280px;
-        text-align: center;
-      }
-
-      .info-tooltip::before {
-        left: 50%;
-        transform: translateX(-50%) rotate(45deg);
-      }
-    }
-
-    @media (max-width: 768px) {
-      header {
-        padding: 20px 15px 18px;
-      }
-
-      h1 {
-        font-size: 22px;
-        margin-bottom: 5px;
-      }
-
-      .subtitle {
-        font-size: 13px;
-      }
-
-      .desktop-container {
-        padding: 8px;
-      }
-
-      .main-content {
-        padding: 20px 15px;
-        padding-top: 50px;
-        border-radius: 12px;
-      }
-
-      .control-buttons {
-        gap: 8px;
-        margin-bottom: 15px;
-      }
-
-      .control-buttons button {
-        flex: 1;
-        min-width: 110px;
-        padding: 12px 20px;
-        font-size: 13px;
-      }
-
-      .checkbox-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        max-width: 100%;
-      }
-
-      .checkbox-grid.type-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .checkbox-item label {
-        padding: 10px 12px;
-        font-size: 14px;
-      }
-
-      .checkbox-item label::before {
-        width: 18px;
-        height: 18px;
-      }
-
-      .checkbox-item label::after {
-        left: 17px;
-        font-size: 12px;
-      }
-
-      .button-group {
-        margin: 20px 0 15px;
-      }
-
-      .generate-button {
-        font-size: 15px;
-        padding: 14px 35px;
-        max-width: 100%;
-        letter-spacing: 1px;
-      }
-
-      .reset-button {
-        padding: 10px 25px;
-        font-size: 12px;
-        margin-top: 12px;
-      }
-
-      #result {
-        margin: 20px 0 10px;
-        padding: 20px 15px;
-        min-height: 120px;
-      }
-
-      .lecture-code {
-        font-size: 24px;
-        padding: 8px 16px;
-      }
-
-      .lecture-block {
-        font-size: 13px;
-        padding: 6px 12px;
-      }
-
-      .lecture-title {
-        font-size: 15px;
-        padding: 12px 15px;
-        line-height: 1.4;
-      }
-
-      .no-result {
-        font-size: 14px;
-        padding: 10px;
-      }
-
-      .counter {
-        font-size: 12px;
-        padding: 8px 15px;
-        margin-top: 10px;
-      }
-
-      .history-sidebar {
-        padding: 18px;
-        max-height: 300px;
-      }
-
-      .history-title {
-        font-size: 18px;
-        margin-bottom: 12px;
-        padding-bottom: 10px;
-      }
-
-      .history-item {
-        padding: 10px;
-        margin: 6px 0;
-      }
-
-      .history-item-header {
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-
-      .history-item-number,
-      .history-item-code {
-        font-size: 13px;
-      }
-
-      .history-item-block {
-        font-size: 11px;
-      }
-
-      .history-item-title {
-        font-size: 12px;
-        line-height: 1.3;
-        margin-top: 4px;
-      }
-
-      .history-empty {
-        padding: 15px;
-        font-size: 13px;
-      }
-
-      footer {
-        margin-top: 25px;
-        padding: 20px 15px;
-      }
-
-      .disclaimer {
-        font-size: 11px;
-        line-height: 1.5;
-        margin-bottom: 10px;
-      }
-
-      .footer-divider {
-        margin: 12px auto;
-      }
-
-      .footer-text {
-        font-size: 12px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 20px;
-      }
-
-      .subtitle {
-        font-size: 12px;
-      }
-
-      .main-content {
-        padding: 18px 12px;
-        padding-top: 50px;
-      }
-
-      .control-buttons {
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      .control-buttons button {
-        width: 100%;
-        min-width: auto;
-        padding: 12px;
-      }
-
-      .checkbox-grid {
-        grid-template-columns: 1fr;
-        gap: 6px;
-      }
-
-      .checkbox-grid.type-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .checkbox-item label {
-        padding: 12px;
-      }
-
-      .generate-button {
-        font-size: 14px;
-        padding: 13px 30px;
-      }
-
-      #result {
-        min-height: 100px;
-        padding: 18px 12px;
-      }
-
-      .lecture-header {
-        gap: 8px;
-        margin-bottom: 12px;
-      }
-
-      .lecture-code {
-        font-size: 22px;
-        padding: 6px 14px;
-      }
-
-      .lecture-block {
-        font-size: 12px;
-        padding: 5px 10px;
-      }
-
-      .lecture-title {
-        font-size: 14px;
-        padding: 10px 12px;
-      }
-
-      .history-sidebar {
-        padding: 15px;
-        max-height: 250px;
-      }
-    }
-
-    /* Touch devices - larger touch targets */
-    @media (hover: none) and (pointer: coarse) {
-      .control-buttons button {
-        min-height: 44px;
-      }
-
-      .checkbox-item label {
-        min-height: 44px;
-      }
-
-      .generate-button {
-        min-height: 50px;
-      }
-
-      .reset-button {
-        min-height: 42px;
-      }
-
-      .info-button {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-      }
-
-      /* Show tooltip on tap for touch devices */
-      .info-button:active .info-tooltip {
-        opacity: 1;
-        visibility: visible;
-        top: 50px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBGYN Past Papers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        select, input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #333;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+        }
+
+        .button-group {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        button {
+            padding: 10px;
+            border: 1px solid #333;
+            background: #333;
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background: #555;
+            border-color: #555;
+        }
+
+        .reset-btn {
+            background: white;
+            color: #333;
+            border-color: #ddd;
+        }
+
+        .reset-btn:hover {
+            background: #f9f9f9;
+            border-color: #999;
+        }
+
+        .stats {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .questions {
+            display: grid;
+            gap: 12px;
+        }
+
+        .question-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .question-header {
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+            border-bottom: 1px solid #eee;
+            user-select: none;
+        }
+
+        .question-header:hover {
+            background: #f0f0f0;
+        }
+
+        .question-id {
+            font-weight: 600;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .question-topic {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .arrow {
+            color: #666;
+            font-size: 12px;
+            transition: transform 0.2s;
+        }
+
+        .question-card.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .question-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .question-card.open .question-content {
+            display: block;
+        }
+
+        .question-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .options {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 3px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .option-item {
+            padding: 10px 8px;
+            margin: 5px 0;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .option-item:hover {
+            background: #f0f0f0;
+            border-color: #ddd;
+        }
+
+        .option-item.selected {
+            border-color: #333;
+            background: #f0f0f0;
+        }
+
+        .answer-btn {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .answer-btn:hover {
+            background: #f5f5f5;
+            border-color: #999;
+        }
+
+        .answer-box {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .answer-box.show {
+            display: block;
+        }
+
+        .answer-box.correct {
+            background: #d4edda;
+            border-left: 3px solid #28a745;
+        }
+
+        .answer-box.incorrect {
+            background: #f8d7da;
+            border-left: 3px solid #dc3545;
+        }
+
+        .answer-box.hidden {
+            background: #e7f3ff;
+            border-left: 3px solid #0066cc;
+        }
+
+        .answer-text {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .answer-box.correct .answer-text {
+            color: #155724;
+        }
+
+        .answer-box.incorrect .answer-text {
+            color: #721c24;
+        }
+
+        .answer-box.hidden .answer-text {
+            color: #004085;
+        }
+
+        .explanation {
+            font-size: 12px;
+            line-height: 1.4;
+            margin-top: 5px;
+        }
+
+        .answer-box.correct .explanation {
+            color: #155724;
+        }
+
+        .answer-box.incorrect .explanation {
+            color: #721c24;
+        }
+
+        .answer-box.hidden .explanation {
+            color: #004085;
+        }
+
+        .feedback-icon {
+            font-size: 18px;
+            margin-right: 8px;
+        }
+
+        .feedback-text {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .correct-answer {
+            margin-top: 8px;
+            font-size: 12px;
+            padding: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>OBGYN Past Papers</h1>
+            <p class="subtitle">M27 & M28 Clinical Test Questions</p>
+        </header>
 
-  <header>
-    <h1>🏥 Surgery Lecture Generator</h1>
-    <p class="subtitle">Your personalized study companion</p>
-  </header>
+        <div class="filters">
+            <select id="classFilter" onchange="filterQuestions()">
+                <option value="">All Classes</option>
+                <option value="">--- M27 ---</option>
+                <option value="M27_R1">M27 R1</option>
+                <option value="M27_R2">M27 R2</option>
+                <option value="M27_R3">M27 R3</option>
+                <option value="">--- M28 ---</option>
+                <option value="M28_R1">M28 R1</option>
+                <option value="M28_R2">M28 R2</option>
+            </select>
 
-  <div class="desktop-container">
-    <div class="main-content">
-      <!-- Info Button -->
-      <div class="info-button-container">
-        <button class="info-button" type="button">
-          ℹ️
-          <div class="info-tooltip">📚 Select lecture types and blocks you want to study from</div>
-        </button>
-      </div>
+            <select id="topicFilter" onchange="filterQuestions()">
+                <option value="">All Topics</option>
+                <option value="2">2. Antenatal Care</option>
+                <option value="3.1">3.1 Hypertensive Disorder</option>
+                <option value="3.2">3.2 Antepartum Haemorrhage</option>
+                <option value="5.1">5.1 Mechanism of Labor</option>
+                <option value="5.2">5.2 Preterm</option>
+                <option value="6">6. Puerperium</option>
+                <option value="7.1">7.1 Abnormal Uterine Bleeding</option>
+                <option value="7.2">7.2 Amenorrhea & Menopause</option>
+                <option value="7.3">7.3 Dysmenorrhea & Endometriosis</option>
+                <option value="8">8. Vaginal Discharge</option>
+                <option value="9">9. Gynaecological Neoplasms</option>
+                <option value="10.1">10.1 Urinary Incontinence</option>
+                <option value="10.2">10.2 Pelvic Organ Prolapse</option>
+                <option value="11">11. Fertility & Contraception</option>
+                <option value="12.1">12.1 Miscarriage & Ectopic</option>
+                <option value="12.2">12.2 Termination of Pregnancy</option>
+            </select>
 
-      <!-- LECTURE TYPE SECTION -->
-      <div class="section-divider">
-        <span>📖 Lecture Type</span>
-      </div>
+            <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterQuestions()">
 
-      <div class="control-buttons">
-        <button onclick="selectAllTypes()">✓ Select All Types</button>
-        <button onclick="deselectAllTypes()">✗ Deselect All Types</button>
-      </div>
+            <div style="grid-column: 1 / -1;"></div>
 
-      <div class="checkbox-container">
-        <div class="checkbox-grid type-grid">
-          <div class="checkbox-item">
-            <input type="checkbox" id="type-gc" name="type" value="GC" checked>
-            <label for="type-gc">GC (Lecture)</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="type-ss" name="type" value="SS" checked>
-            <label for="type-ss">SS (Seminar)</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="type-recall" name="type" value="Recall">
-            <label for="type-recall">Recall (AR/BR)</label>
-          </div>
+            <button onclick="filterQuestions()">Search</button>
+            <button class="reset-btn" onclick="resetFilters()">Reset</button>
         </div>
-      </div>
 
-      <!-- BLOCKS SECTION -->
-      <div class="section-divider">
-        <span>🏥 Subject Blocks</span>
-      </div>
-
-      <div class="control-buttons">
-        <button onclick="selectAllBlocks()">✓ Select All Blocks</button>
-        <button onclick="deselectAllBlocks()">✗ Deselect All Blocks</button>
-      </div>
-
-      <div class="checkbox-container">
-        <div class="checkbox-grid">
-          <div class="checkbox-item">
-            <input type="checkbox" id="nsg" name="block" value="B: NSG">
-            <label for="nsg">NSG</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="vascular" name="block" value="B: Vascular">
-            <label for="vascular">Vascular</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="trauma" name="block" value="B: Trauma">
-            <label for="trauma">Trauma</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="hbp" name="block" value="B: HBP">
-            <label for="hbp">HBP</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="endocrine" name="block" value="B: Endocrine">
-            <label for="endocrine">Endocrine</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="plastic" name="block" value="B: Plastic">
-            <label for="plastic">Plastic</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="lowergi" name="block" value="B: Lower GI">
-            <label for="lowergi">Lower GI</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="urology" name="block" value="B: Urology">
-            <label for="urology">Urology</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="breast" name="block" value="B: Breast">
-            <label for="breast">Breast</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="uppergi" name="block" value="B: Upper GI">
-            <label for="uppergi">Upper GI</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="ent" name="block" value="B: ENT">
-            <label for="ent">ENT</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="cts" name="block" value="B: CTS">
-            <label for="cts">CTS</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="ortho" name="block" value="B: Ortho">
-            <label for="ortho">Ortho</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="ped" name="block" value="B: Ped">
-            <label for="ped">Ped</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" id="misc" name="block" value="B: Misc">
-            <label for="misc">Misc</label>
-          </div>
+        <div class="stats">
+            Showing <strong id="count">0</strong> of <strong id="total">0</strong> questions
         </div>
-      </div>
 
-      <div class="button-group">
-        <button class="generate-button" onclick="generateLecture()">🎲 Generate Lecture</button>
-        <br>
-        <button class="reset-button" id="resetBtn" onclick="resetProgress()">🔄 Reset Progress</button>
-      </div>
-
-      <div id="result">
-        <div class="no-result">Select lecture types, blocks and click Generate to see a random lecture</div>
-      </div>
-
-      <div style="text-align: center;">
-        <div class="counter" id="counter"></div>
-      </div>
+        <div class="questions" id="questions"></div>
     </div>
 
-    <!-- HISTORY SIDEBAR -->
-    <div class="history-sidebar">
-      <div class="history-title">📋 Lectures Viewed</div>
-      <div class="history-list" id="historyList">
-        <div class="history-empty">No lectures viewed yet</div>
-      </div>
-    </div>
-  </div>
+    <script>
+        const questions = [
+            // 2. Antenatal Care
+            {id: "M27_R1(22)_Q10", topic: "2", class: "M27_R1", question: "A 27-year-old woman, G1P0, attended her first antenatal check-up at 12 weeks of gestation. She has hypothyroidism requiring thyroxine replacement. Which of the following investigations should be performed to monitor if the replacement is adequate?", options: ["Antibodies against thyroid peroxidase", "Iodine level", "Thyroid function test", "Thyroid ultrasound"], answer: "C", answerText: "Thyroid function test", explanation: ""},
+            {id: "M27_R3(1)_Q2", topic: "2", class: "M27_R3", question: "A 42-year-old gravida 1 para 0 patient came to antenatal clinic for her first antenatal visit. She enjoyed good past health. Which of the following routine antenatal screening test(s) should be arranged for her?", options: ["Anomaly scan at first trimester", "Antenatal bloods (MCM, Rhesus, ABO, VDRL, Anti-HIV, HBsAg) at first visit", "Group B streptococcus screening at first visit", "Oral glucose tolerance test at first trimester"], answer: "B", answerText: "Antenatal bloods at first visit", explanation: ""},
+            {id: "M27_R2(12)_Q8", topic: "2", class: "M27_R2", question: "A 35-year-old G1P0 woman was 20 weeks pregnant. The fetus was found to have complete heart block on anomaly scan. What is the maternal factor you would investigate?", options: ["Anti cardiolipin", "Anti D", "Anti Rho", "Anti microsomal"], answer: "C", answerText: "Anti Rho", explanation: ""},
+            {id: "M27_R2(14)_Q2", topic: "2", class: "M27_R2", question: "Glucose levels: Fasting: 4 mmol/L, 2 hour: 7.6 mmol/L. How would you manage this patient?", options: ["Refer to endocrinologist", "Repeat test", "Normal glucose level and reassure", "Start metformin"], answer: "C", answerText: "Normal glucose level and reassure", explanation: ""},
+            {id: "M27_R3(1)_Q9", topic: "2", class: "M27_R3", question: "A 30-year-old woman attended pre-marital checkup. Blood test: Hb 11 g/dL, MCV 68 fL, HbA2 2.5%, occasional Hb H bodies. From Southern China. Which is the most appropriate advice?", options: ["To check the mean corpuscular volume of the husband", "To conceive by in-vitro fertilisation", "To start taking folic acid after confirming pregnancy", "To start taking iron supplement before pregnancy"], answer: "A", answerText: "To check the mean corpuscular volume of the husband", explanation: "HbH disease carrier; need to screen husband"},
+            {id: "M27_R3(8)_Q8", topic: "2", class: "M27_R3", question: "A 40-year-old primigravida received high risk first trimester combined Down syndrome screening (1 in 3 chance of T21) at 12 weeks. Patient worried about miscarriage risk. Which is the appropriate management?", options: ["Chorionic villus sampling", "Direct termination of pregnancy", "Morphology scan", "Non-invasive prenatal testing"], answer: "D", answerText: "Non-invasive prenatal testing", explanation: "NIPT has no miscarriage risk"},
+            {id: "M28_R1(19)_Q2", topic: "2", class: "M28_R1", question: "A 30-year-old G1P0 woman with BMI 25 attended first antenatal visit at 12 weeks. First trimester combined Down's syndrome screening showed a positive result. How would you manage her?", options: ["Offer amniocentesis at 13 weeks", "Offer chorionic villi sampling at 13 weeks", "Offer termination of pregnancy", "Offer second trimester Down's syndrome screening"], answer: "B", answerText: "Offer chorionic villi sampling at 13 weeks", explanation: ""},
+            {id: "M28_R1(19)_Q3", topic: "2", class: "M28_R1", question: "A 30-year-old G1P0 woman with BMI 30 attended antenatal care at 29 weeks. OGTT: 4.5 mmol/L (fasting), 6.0 mmol/L (2hr). What is the next step of management?", options: ["Reassure the patient that results are normal", "Refer to dietician for diet control", "Repeat OGTT the following week", "Start on metformin"], answer: "A", answerText: "Reassure the patient that results are normal", explanation: ""},
+            {id: "M28_R1(18)_Q10", topic: "2", class: "M28_R1", question: "38-year old primigravida with high risk 2nd trimester biochemical Down syndrome screening (1 in 10 chance T21) at wk17. US showed fetal AV septal defect and hypoplasia of nasal bone. What is the management?", options: ["Amniocentesis", "Chorionic villus sampling", "NIPT", "Routine morphology scan"], answer: "A", answerText: "Amniocentesis", explanation: ""},
+            {id: "M28_R1(20)_Q7", topic: "2", class: "M28_R1", question: "A 30-year-old healthy woman planning to get pregnant gives family history of intellectual disability and congenital deafness in her younger brother. Which is the appropriate management?", options: ["Conduct hearing test", "Counsel on X-linked inheritance", "Offer expanded carrier screening", "Referral to pre-pregnancy genetic counselling"], answer: "D", answerText: "Referral to pre-pregnancy genetic counselling", explanation: ""},
 
-  <footer>
-    <div class="footer-content">
-      <p class="disclaimer">
-        This Random Surgery Lecture Generator is for educational purposes only and does not constitute medical advice. Please consult a qualified healthcare professional for any health concerns.
-      </p>
-      <div class="footer-divider"></div>
-      <p class="footer-text">&copy; 2025 Branson Lau. All rights reserved.</p>
-    </div>
-  </footer>
+            // 3.1 Hypertensive Disorder
+            {id: "M27_R1(21)_Q9", topic: "3.1", class: "M27_R1", question: "A 29-year-old lady is now pregnant at 12 weeks. She has insulin-dependent diabetes for 10 years with fair glycaemic control. Aspirin has been started. What condition may be preventable by aspirin?", options: ["Diabetic ketoacidosis", "Fetal neural tube defect", "Macrosomia", "Pre-eclampsia"], answer: "D", answerText: "Pre-eclampsia", explanation: ""},
+            {id: "M27_R3(1)_Q4", topic: "3.1", class: "M27_R3", question: "A 30-year-old G1P0 woman with BMI 30 attended antenatal visit at 38 weeks. Single BP: 145/90 mmHg. Urine dipstix for albumin: negative. How would you manage her?", options: ["Manage as chronic hypertension", "Manage as gestational hypertension", "Manage as pre-eclampsia", "Recheck blood pressure"], answer: "D", answerText: "Recheck blood pressure", explanation: "Single reading needs confirmation"},
+            {id: "M28_R2(9)_Q10", topic: "3.1", class: "M28_R2", question: "A 40-year-old woman, G1P0, admitted for headache at 38 weeks' gestation. Epigastric discomfort. BP: 180/100 mmHg. Urine protein: 3+. Found unconscious with witnessed limb twitching.", options: ["Amniotic fluid embolism", "Aortic dissection", "Eclampsia", "Seizure"], answer: "C", answerText: "Eclampsia", explanation: ""},
+            {id: "M28_R2(12)_Q10", topic: "3.1", class: "M28_R2", question: "A 32-year-old woman with chronic hypertension seen at 16-week antenatal visit. BP: 130/80 mmHg. Which is the MOST appropriate management?", options: ["Increase antihypertensive medication dosage", "Initiate low-dose aspirin therapy", "Refer for maternal-fetal medicine specialist consultation", "Schedule routine follow-up every 4 weeks"], answer: "B", answerText: "Initiate low-dose aspirin therapy", explanation: ""},
 
-  <script>
-    const lectures = [
-      // Original GC Lectures
-      { code: "GC108", block: "B: NSG", title: "A mass in the brain: brain tumours" },
-      { code: "GC109", block: "B: NSG", title: "Headache and loss of consciousness: Acute stroke, subarachnoid haemorrhage and vascular malformation" },
-      { code: "GC110", block: "B: NSG", title: "Paraplegia: spinal cord compression; transverse myelitis; spinal dysraphism; neuroimaging III: spinal cord" },
-      { code: "GC111", block: "B: NSG", title: "Raised intracranial pressure and hydrocephalus" },
-      { code: "GC138", block: "B: Vascular", title: "My foot hurts: Foot problems" },
-      { code: "GC175", block: "B: Trauma", title: "A bus hit a train: Multiple trauma; Disaster management" },
-      { code: "GC176", block: "B: HBP", title: "A large liver: liver cancer" },
-      { code: "GC177", block: "B: Endocrine", title: "A thyroid nodule: benign thyroid nodules; thyroid cancer" },
-      { code: "GC178", block: "B: Plastic", title: "An ugly wound: Wound healing; Wound infection; Anti-septic technique" },
-      { code: "GC179", block: "B: Lower GI", title: "Anal pain: perianal lesions and sepsis" },
-      { code: "GC180", block: "B: Urology", title: "Benign prostatic hyperplasia, bladder outlet obstruction and urinary retention" },
-      { code: "GC181", block: "B: Breast", title: "Breast mass: breast cancer; benign breast diseases; mammography; breast cancer screening" },
-      { code: "GC182", block: "B: Trauma", title: "Chopped and stabbed wound in gang fight: Nerves and vascular injury; Classification of injuries" },
-      { code: "GC183", block: "B: Urology", title: "Common urologic malignalities and their presentations" },
-      { code: "GC184", block: "B: Urology", title: "Erection and erectile dysfunction" },
-      { code: "GC185", block: "B: Upper GI", title: "Feed him up before surgery: Surgical nutrition, Enteral and parenteral feeding" },
-      { code: "GC186", block: "B: Lower GI", title: "Fresh blood in stool: lower GI bleeding" },
-      { code: "GC187", block: "B: ENT", title: "Head and neck cancer problems: Function and shape" },
-      { code: "GC188", block: "B: Trauma", title: "Hit by a van, in shock with internal bleeding: Abdominal injury" },
-      { code: "GC189", block: "B: Upper GI", title: "I can't swallow: oesophageal cancer" },
-      { code: "GC190", block: "B: Plastic", title: "I have a scald: Burn" },
-      { code: "GC192", block: "B: Plastic", title: "I want to look better: Plastic and reconstructive surgery" },
-      { code: "GC193", block: "B: Urology", title: "Inguinal and scrotal swelling: different types of hernia" },
-      { code: "GC194", block: "B: Lower GI", title: "Intestinal obstruction: colorectal cancer" },
-      { code: "GC195", block: "B: Lower GI", title: "Lower and diffuse abdominal pain: RLQ problems; pelvic inflammatory disease; peritonitis and abdominal emergencies" },
-      { code: "GC196", block: "B: CTS", title: "Minimally Invasive Thoracic Surgery" },
-      { code: "GC197", block: "B: Upper GI", title: "Painless jaundice and epigastric mass: obstructive jaundice; pancreatic and CBD cancers" },
-      { code: "GC198", block: "B: Upper GI", title: "Profuse vomiting of fresh blood and in shock: severe upper GI bleeding" },
-      { code: "GC199", block: "B: Vascular", title: "Pulsating abdominal mass: aortic aneurysm" },
-      { code: "GC200", block: "B: HBP", title: "RUQ pain, jaundice and fever: Cholecytitis and cholangitis Imaging of GI system" },
-      { code: "GC201", block: "B: Plastic", title: "Skin ulcers: skin and subcutaneous lesions; skin cancer" },
-      { code: "GC202", block: "B: Plastic", title: "Surgery may cure your cancer: Surgical oncology" },
-      { code: "GC203", block: "B: Ped", title: "The child needs an operation: Common emergencies and surgery in childhood" },
-      { code: "GC204", block: "B: Ped", title: "The newborn baby cannot breathe: Oesophageal atresia, diaphragmatic hernia, and other surgery of lung" },
-      { code: "GC205", block: "B: Ped", title: "The newborn baby is vomiting repeatedly: Neonatal intestinal obstruction and other GI emergencies" },
-      { code: "GC206", block: "B: Vascular", title: "Toe gangrene and leg ulcer: peripheral vascular ischaemia; acute vascular emergencies" },
-      { code: "GC207", block: "B: Trauma", title: "Trauma Evaluation and Management (TEAM)" },
-      { code: "GC208", block: "B: Trauma", title: "Unconscious after an accident: Head injury" },
-      { code: "GC209", block: "B: Urology", title: "Urinary incontinence and overactive bladder" },
-      { code: "GC210", block: "B: Urology", title: "Urinary tract infection" },
-      { code: "GC211", block: "B: Vascular", title: "Varicose veins: diseases of the veins and lymphatics; venous thrombosis" },
-      { code: "GC212", block: "B: Upper GI", title: "Weight loss and vomiting: gastric cancer; abdominal imaging" },
-      { code: "GC213", block: "B: Ped", title: "Why do you wet your bed all the time? Paediatric urology" },
-      { code: "GC214", block: "B: ENT", title: "Common ear diseases and hearing loss" },
-      { code: "GC215", block: "B: ENT", title: "Common nasal conditions and nasopharyngeal carcinoma" },
-      { code: "GC216", block: "B: ENT", title: "Dysphonia: Laryngitis, voice abuse, tumour and laryngeal cancer" },
-      { code: "GC217", block: "B: ENT", title: "Facial nerve palsy and salivary gland diseases" },
-      { code: "GC218", block: "B: ENT", title: "I have a swelling in the neck: Neck mass" },
-      { code: "GC219", block: "B: ENT", title: "Infections and tumours in pharynx and oral cavity" },
-      { code: "GC220", block: "B: ENT", title: "Upper airway obstruction and tracheostomy" },
-      { code: "GC221", block: "B: ENT", title: "Vertigo: Peripheral and central" },
-      { code: "GC226", block: "B: Ortho", title: "Lumbar spine pathology" },
-      { code: "GC227", block: "B: Ortho", title: "Cervical spine pathology" },
-      { code: "GC228", block: "B: Ortho", title: "Knee osteoarthritis" },
-      { code: "GC229", block: "B: Ortho", title: "Hip Arthritis" },
-      { code: "GC230", block: "B: Ortho", title: "Knee sports injuries" },
-      { code: "GC231", block: "B: Ortho", title: "High energy trauma & open fracture" },
-      { code: "GC232", block: "B: Ortho", title: "Paediatric musculoskeletal injury" },
-      { code: "GC233", block: "B: Ortho", title: "Common hand injuries" },
-      { code: "GC234", block: "B: Ortho", title: "Common foot & ankle conditions" },
-      { code: "GC235", block: "B: Ortho", title: "Osteoporotic Related Fractures" },
-      { code: "GC236", block: "B: Ortho", title: "Common shoulder problems" },
-      { code: "GC237", block: "B: Ortho", title: "Musculoskeletal infection" },
-      
-      // SS Lectures
-      { code: "SS1", block: "B: HBP", title: "Acute Pancreatitis" },
-      { code: "SS2", block: "B: HBP", title: "Advanced liver surgery for HBP malignancy" },
-      { code: "SS3", block: "B: Urology", title: "Benign Prostatic Hyperplasia" },
-      { code: "SS4", block: "B: Plastic", title: "Burns" },
-      { code: "SS5", block: "B: Ped", title: "Case Study – Paediatric Surgery: Bilious vomiting of new-born" },
-      { code: "SS6", block: "B: Ped", title: "Case Study – Paediatric Surgery: Urological conditions I" },
-      { code: "SS7", block: "B: Ped", title: "Case Study – Paediatric Surgery: Urological conditions II" },
-      { code: "SS8", block: "B: NSG", title: "Cererbrovascular Disease" },
-      { code: "SS9", block: "B: Plastic", title: "Cleft lip & palate" },
-      { code: "SS10", block: "B: Lower GI", title: "Colorectal Malignancy" },
-      { code: "SS11", block: "B: Lower GI", title: "Diverticular diseases" },
-      { code: "SS12", block: "B: HBP", title: "HCC" },
-      { code: "SS13", block: "B: HBP", title: "Gallstone & acute cholangitis" },
-      { code: "SS14", block: "B: NSG", title: "Hydrocephalus & Paediatric Neurosurgery" },
-      { code: "SS15", block: "B: Lower GI", title: "Inflammatory bowel disease: Surgical perspectives" },
-      { code: "SS16", block: "B: HBP", title: "Malignant Biliary Obstruction" },
-      { code: "SS17", block: "B: Endocrine", title: "Management of differentiated thyroid carcinoma" },
-      { code: "SS18", block: "B: Ped", title: "Neonatal Surgery" },
-      { code: "SS19", block: "B: Ped", title: "Paediatric General Surgery and Oncology" },
-      { code: "SS20", block: "B: Ped", title: "Paedaitric Thoracic Surgery" },
-      { code: "SS21", block: "B: Ped", title: "Paediatric Urology" },
-      { code: "SS22", block: "B: HBP", title: "Portal Hypertension" },
-      { code: "SS23", block: "B: Urology", title: "Urological Cancer" },
-      { code: "SS24", block: "B: Urology", title: "Urolithiasis" },
-      { code: "SS25", block: "B: ENT", title: "Some common head & neck conditions" },
-      { code: "SS26", block: "B: Lower GI", title: "Stoma and related problems" },
-      { code: "SS27", block: "B: Breast", title: "The management of breast cancer" },
+            // 3.2 Antepartum Haemorrhage
+            {id: "M27_R1(21)_Q3", topic: "3.2", class: "M27_R1", question: "A 22-year-old nulliparous chronic smoker presents at 35 weeks with heavy vaginal bleeding. PR: 120, BP: 150/100. Uterus tender and irritable. CTG shows fetal bradycardia. What is the diagnosis?", options: ["Placental abruption", "Placenta previa", "Preterm labour", "Vasa previa"], answer: "A", answerText: "Placental abruption", explanation: ""},
+            {id: "M27_R2(12)_Q6", topic: "3.2", class: "M27_R2", question: "A 50-year-old nulliparous woman admitted with heavy APH at 36 weeks. History of laparotomy with ovarian cystectomy. Suprapubic transverse scar. What is the likely diagnosis?", options: ["APH of unknown origin", "Placental abruption", "Placenta previa", "Uterine rupture"], answer: "B", answerText: "Placental abruption", explanation: ""},
+            {id: "M27_R3(8)_Q1", topic: "3.2", class: "M27_R3", question: "A 38-year-old multiparous woman admitted with heavy APH at 36 weeks. Three previous CS. Uterus soft and non-tender. Fetal head totally above brim. What is the cause?", options: ["Placental abruption", "Placenta previa", "Vasa previa", "Uterine rupture"], answer: "B", answerText: "Placenta previa", explanation: "Soft uterus = previa, not abruption"},
+            {id: "M27_R3(8)_Q2", topic: "3.2", class: "M27_R3", question: "A 30-year-old nulliparous woman admitted with heavy APH at 36 weeks. History of laparotomy. Suprapubic scar. Uterus tender and irritable. What is the cause?", options: ["APH of unknown origin", "Placental abruption", "Placenta previa", "Uterine rupture"], answer: "B", answerText: "Placental abruption", explanation: "Tender uterus = abruption"},
+            {id: "M28_R2(13)_Q10", topic: "3.2", class: "M28_R2", question: "A 28-year-old woman at 30 weeks diagnosed with GDM (OGTT 9 mmol/L at 2 hours). What is the most appropriate initial management?", options: ["Recommend dietary modifications and self-monitoring", "Refer to endocrinologist", "Schedule follow-up in 4 weeks", "Start insulin therapy immediately"], answer: "A", answerText: "Recommend dietary modifications and self-monitoring", explanation: ""},
 
-      // Combined Recall Lectures (BR/AR merged)
-      { code: "BR1", block: "B: Misc", title: "Introduction" },
-      { code: "AR1a", block: "B: Misc", title: "Surgical Notes" },
-      { code: "AR1b", block: "B: Misc", title: "Common Abbreviations You Should Know" },
-      { code: "AR1c", block: "B: Misc", title: "Glossary of Surgical Terms You Should Know" },
-      { code: "AR1d", block: "B: Misc", title: "Surgery Signs, Triads, etc. You Should Know" },
-      { code: "AR2 (BR2)", block: "B: Misc", title: "Surgical Syndromes" },
-      { code: "AR3 (BR3)", block: "B: Misc", title: "Surgical Most Commons" },
-      { code: "AR4 (BR4)", block: "B: Misc", title: "Surgical Percentages" },
-      { code: "AR5", block: "B: Misc", title: "Surgical History" },
-      { code: "AR6 (BR5)", block: "B: Misc", title: "Surgical Instruments" },
-      { code: "AR7 (BR6)", block: "B: Misc", title: "Sutures and Stitches" },
-      { code: "AR8 (BR7)", block: "B: Misc", title: "Surgical Knot Tying" },
-      { code: "AR9 (BR8)", block: "B: Misc", title: "Procedures for the Surgical Ward and Clinic" },
-      { code: "AR10 (BR9)", block: "B: Misc", title: "Incisions" },
-      { code: "AR11 (BR10)", block: "B: Misc", title: "Surgical Positions" },
-      { code: "AR12 (BR11)", block: "B: Misc", title: "Surgical Speak" },
-      { code: "AR13 (BR12)", block: "B: Misc", title: "Preoperative 101" },
-      { code: "AR14 (BR13)", block: "B: Misc", title: "Surgical Operations You Should Know" },
-      { code: "AR15 (BR14)", block: "B: Plastic", title: "Wounds" },
-      { code: "AR16 (BR15)", block: "B: Misc", title: "Drains and Tubes" },
-      { code: "AR17 (BR16)", block: "B: Misc", title: "Surgical Anatomy Pearls" },
-      { code: "AR18 (BR17)", block: "B: Misc", title: "Fluids and Electrolytes" },
-      { code: "AR19 (BR18)", block: "B: Misc", title: "Blood and Blood Products" },
-      { code: "AR20 (BR19)", block: "B: Misc", title: "Surgical Hemostasis" },
-      { code: "AR21 (BR20)", block: "B: Misc", title: "Common Surgical Medications" },
-      { code: "AR22 (BR21)", block: "B: Misc", title: "Complications" },
-      { code: "AR23 (BR22)", block: "B: Misc", title: "Common Causes of Ward Emergencies" },
-      { code: "AR24 (BR23)", block: "B: Misc", title: "Surgical Respiratory Care" },
-      { code: "AR25 (BR24)", block: "B: Misc", title: "Surgical Nutrition" },
-      { code: "AR26 (BR25)", block: "B: Misc", title: "Shock" },
-      { code: "AR27 (BR26)", block: "B: Misc", title: "Surgical Infection" },
-      { code: "AR28 (BR27)", block: "B: Misc", title: "Fever" },
-      { code: "AR29 (BR28)", block: "B: Misc", title: "Surgical Prophylaxis" },
-      { code: "AR30 (BR29)", block: "B: Misc", title: "Surgical Radiology" },
-      { code: "AR31 (BR30)", block: "B: Misc", title: "Anesthesia" },
-      { code: "AR32 (BR31)", block: "B: Misc", title: "Surgical Ulcers" },
-      { code: "AR33 (BR32)", block: "B: Misc", title: "Surgical Oncology" },
-      { code: "AR34 (BR33)", block: "B: Upper GI", title: "GI Hormones and Physiology" },
-      { code: "AR35 (BR34)", block: "B: Upper GI", title: "Acute Abdomen and Referred Pain" },
-      { code: "AR36 (BR35)", block: "B: Urology", title: "Hernias" },
-      { code: "AR37 (BR36)", block: "B: Lower GI", title: "Laparoscopy" },
-      { code: "AR38 (BR37)", block: "B: Trauma", title: "Trauma" },
-      { code: "AR39 (BR38)", block: "B: Plastic", title: "Burns" },
-      { code: "AR40 (BR39)", block: "B: Upper GI", title: "Upper GI Bleeding" },
-      { code: "AR41 (BR40)", block: "B: Upper GI", title: "Stomach" },
-      { code: "AR42 (BR41)", block: "B: Upper GI", title: "Bariatric Surgery" },
-      { code: "AR43 (BR42)", block: "B: Lower GI", title: "Ostomies" },
-      { code: "AR44 (BR43)", block: "B: Lower GI", title: "Small Intestine" },
-      { code: "AR45 (BR44)", block: "B: Lower GI", title: "Appendix" },
-      { code: "AR46 (BR45)", block: "B: Lower GI", title: "Carcinoid Tumors" },
-      { code: "AR47 (BR46)", block: "B: Lower GI", title: "Fistulas" },
-      { code: "AR48 (BR47)", block: "B: Lower GI", title: "Colon and Rectum" },
-      { code: "AR49 (BR48)", block: "B: Lower GI", title: "Anus" },
-      { code: "AR50 (BR49)", block: "B: Lower GI", title: "Lower GI Bleeding" },
-      { code: "AR51 (BR50)", block: "B: Lower GI", title: "Inflammatory Bowel Disease: Crohn's and UC" },
-      { code: "AR52 (BR51)", block: "B: HBP", title: "Liver" },
-      { code: "AR53 (BR52)", block: "B: HBP", title: "Portal Hypertension" },
-      { code: "AR54 (BR53)", block: "B: HBP", title: "Biliary Tract" },
-      { code: "AR55 (BR54)", block: "B: HBP", title: "Pancreas" },
-      { code: "AR56 (BR55)", block: "B: Breast", title: "Breast" },
-      { code: "AR57 (BR56)", block: "B: Endocrine", title: "Endocrine" },
-      { code: "AR58 (BR57)", block: "B: Endocrine", title: "Thyroid Gland" },
-      { code: "AR59 (BR58)", block: "B: Endocrine", title: "Parathyroid" },
-      { code: "AR60 (BR59)", block: "B: HBP", title: "Spleen and Splenectomy" },
-      { code: "AR61 (BR60)", block: "B: Vascular", title: "Surgically Correctable HTN" },
-      { code: "AR62 (BR61)", block: "B: Plastic", title: "Soft Tissue Sarcomas and Lymphomas" },
-      { code: "AR63 (BR62)", block: "B: Plastic", title: "Skin Lesions" },
-      { code: "AR64 (BR63)", block: "B: Plastic", title: "Melanoma" },
-      { code: "AR65 (BR64)", block: "B: Misc", title: "Surgical Intensive Care" },
-      { code: "AR66 (BR65)", block: "B: Vascular", title: "Vascular Surgery" },
-      { code: "AR67 (BR66)", block: "B: Ped", title: "Pediatric Surgery" },
-      { code: "AR68 (BR67)", block: "B: Plastic", title: "Plastic Surgery" },
-      { code: "AR69 (BR68)", block: "B: ENT", title: "Hand Surgery" },
-      { code: "AR70 (BR69)", block: "B: ENT", title: "Otolaryngology: Head and Neck Surgery" },
-      { code: "AR71 (BR70)", block: "B: CTS", title: "Thoracic Surgery" },
-      { code: "AR72 (BR71)", block: "B: CTS", title: "Cardiovascular Surgery" },
-      { code: "AR73 (BR72)", block: "B: Misc", title: "Transplant Surgery" },
-      { code: "AR74 (BR73)", block: "B: Ortho", title: "Orthopaedic Surgery" },
-      { code: "AR75 (BR74)", block: "B: NSG", title: "Neurosurgery" },
-      { code: "AR76 (BR75)", block: "B: Urology", title: "Urology" }
-    ];
+            // 5.1 Mechanism of Labor
+            {id: "M27_R1(23)_Q5", topic: "5.1", class: "M27_R1", question: "A 30-year-old primiparous woman with GDM in labour. Induced at 39 weeks. After fetal head delivery, unable to deliver body with gentle traction. Turtle sign noted. What is the diagnosis?", options: ["Cephalopelvic disproportion", "Malpresentation", "Prolonged second stage", "Shoulder dystocia"], answer: "D", answerText: "Shoulder dystocia", explanation: ""},
+            {id: "M28_R1(19)_Q6", topic: "5.1", class: "M28_R1", question: "A 25-year-old primiparous woman with GDM in labour. Induced at 39 weeks. Fetal head delivered 45 min after full cervical dilation. Unable to deliver body. Turtle sign noted. What is the diagnosis?", options: ["Cephalopelvic disproportion", "Malpresentation", "Prolonged second stage", "Shoulder dystocia"], answer: "D", answerText: "Shoulder dystocia", explanation: ""},
+            {id: "M27_R2(14)_Q4", topic: "5.1", class: "M27_R2", question: "There is slow progress in cervix dilatation. Who to inform?", options: ["Intern", "Obstetrician", "Midwife"], answer: "B", answerText: "Obstetrician", explanation: ""},
+            {id: "M28_R1(18)_Q4", topic: "5.1", class: "M28_R1", question: "A 40-year-old G1P0 admitted at 39 weeks with regular contractions. Show and clear liquor leaking. Cervix 5cm, DOP, +1 station, 2cm caput, 2+ moulding. Who to call?", options: ["Anaesthesiologist", "Interns", "Medical Officer", "Paediatrician"], answer: "C", answerText: "Medical Officer", explanation: ""},
+            {id: "M28_R1(20)_Q4", topic: "5.1", class: "M28_R1", question: "A 30-year-old at 36 weeks wants to avoid medical intervention during delivery. Which is part of physiological 3rd stage management?", options: ["Early clamping of cord", "Controlled cord traction", "Encourage maternal effort to expel placenta", "Use of syntometrine"], answer: "C", answerText: "Encourage maternal effort to expel placenta", explanation: ""},
+            {id: "M28_R2(12)_Q1", topic: "5.1", class: "M28_R2", question: "A 25-year-old primiparous with GDM in labour. Induced at 39 weeks. Fetal head delivered 45 min after full dilation. Unable to deliver body. Turtle sign. What is the diagnosis?", options: ["Cephalopelvic disproportion", "Malpresentation", "Prolonged second stage", "Shoulder dystocia"], answer: "D", answerText: "Shoulder dystocia", explanation: ""},
 
-    let shownLectures = [];
-    let shownLectureDetails = [];
-    let currentFilteredLectures = [];
+            // 5.2 Preterm
+            {id: "M27_R1(23)_Q1", topic: "5.2", class: "M27_R1", question: "A 25-year-old G1P0 admitted for left lower quadrant pain at 32 weeks. Sudden onset, sharp, persistent. No vaginal bleeding. PR: 100, BP: 120/80. Afebrile. Right lower quadrant tenderness with guarding. What is the diagnosis?", options: ["Acute appendicitis", "Bowel colic", "Threatened preterm labor", "Urinary colic"], answer: "A", answerText: "Acute appendicitis", explanation: ""},
 
-    function selectAllTypes() {
-      const checkboxes = document.querySelectorAll('input[name="type"]');
-      checkboxes.forEach(cb => cb.checked = true);
-    }
+            // 6. Puerperium
+            {id: "M27_R1(21)_Q1", topic: "6", class: "M27_R1", question: "A 40-year-old G5P4 admitted in labour with 4 previous vaginal deliveries. GDM, induced at 38 weeks. 1st stage: 6 hours, 2nd stage: 10 min. NSD, baby weight: 4kg. Profuse vaginal bleeding after placenta. What is the cause?", options: ["Coagulopathy", "Retained products", "Uterine atony", "Vaginal tear"], answer: "C", answerText: "Uterine atony", explanation: ""},
+            {id: "M27_R1(21)_Q2", topic: "6", class: "M27_R1", question: "A 40-year-old G2P0 admitted at 37 weeks with first episode vaginal bleeding. Low-lying placenta covering os. No contraction or pain. Fetus active. BP: 100/60, PR: 108. Speculum: loose os with profuse bleeding. What is the management?", options: ["Conservative with fetal heart monitoring", "Conservative with maternal BP/pulse monitoring", "Emergency Caesarean section", "Digital vaginal examination"], answer: "C", answerText: "Emergency Caesarean section", explanation: ""},
+            {id: "M27_R1(22)_Q2", topic: "6", class: "M27_R1", question: "A 31-year-old G2P2 delivered NSD 5 days ago. Blood loss: 400ml. Readmitted for increased bleeding. Vitals stable. Uterus 16 weeks size, loose os, no cervical excitation. Blood loss 500ml. What is the diagnosis?", options: ["Primary PPH", "Primary and secondary PPH", "Secondary PPH", "Return of menses"], answer: "C", answerText: "Secondary PPH", explanation: "Bleeding >24h after delivery"},
+            {id: "M27_R1(22)_Q3", topic: "6", class: "M27_R1", question: "A 38-year-old G1P0 admitted for elective CS for twin pregnancy. CS done. Total blood loss: 2.6L. Twin 1: 2.3kg, Twin 2: 2.4kg. Placenta complete. Profuse vaginal bleeding in recovery. Uterus well-contracted. What is the diagnosis?", options: ["Coagulopathy", "Placenta previa", "Retained placenta", "Uterine inversion"], answer: "A", answerText: "Coagulopathy", explanation: ""},
+            {id: "M27_R1(22)_Q8", topic: "6", class: "M27_R1", question: "A 20-year-old delivered vaginally with PPH due to uterine atony. Given IM syntometrine, IV fluids, massage, IV oxytocin, tranexamic acid, misoprostol, and 2x IM carboprost. Contractions improved but slow bleeding continues. What next?", options: ["Examination under anesthesia", "Uterine artery embolization", "Third dose IM carboprost", "Transfer to adult ICU"], answer: "A", answerText: "Examination under anesthesia", explanation: ""},
+            {id: "M27_R1(23)_Q2", topic: "6", class: "M27_R1", question: "A 38-year-old G1P0 with twin pregnancy admitted for leaking at 36 weeks. History of uterine fibroids (max 6cm). Emergency LSCS for breech. Uterine atony, intraoperative loss: 1000ml. What are the risk factors for PPH?", options: ["Advanced age and twin pregnancy", "Twin pregnancy and uterine fibroids", "Twin pregnancy and PROM", "Uterine fibroids and PROM"], answer: "B", answerText: "Twin pregnancy and uterine fibroids", explanation: ""},
+            {id: "M27_R1(23)_Q6", topic: "6", class: "M27_R1", question: "A 22-year-old develops primary PPH due to uterine atony after NSD. Which should be given for treatment?", options: ["Blood Transfusion", "Pethidine injection", "Tranexamic acid", "Uterotonic agent"], answer: "D", answerText: "Uterotonic agent", explanation: ""},
+            {id: "M27_R1(23)_Q7", topic: "6", class: "M27_R1", question: "A 30-year-old G1P1 delivered by LSCS 5 days ago. Admitted for increased bleeding (2 pads with clots). Temp: 38°C, BP: 135/85, PR: 105. Cervical excitation and uterine tenderness. What is the diagnosis?", options: ["Endometritis", "Retained products", "UTI", "Uterine rupture"], answer: "A", answerText: "Endometritis", explanation: ""},
+            {id: "M27_R2(12)_Q2", topic: "6", class: "M27_R2", question: "A 33-year-old G5P0 with 4 surgical TOPs delivered vaginally. Traction applied to deliver placenta. Difficulty encountered. Vaginal bleeding not heavy. Mass protruded with profuse bleeding. Placenta still in-situ. What is the diagnosis?", options: ["Uterine inversion", "Uterine atony", "Lower genital trauma", "Genital prolapse"], answer: "A", answerText: "Uterine inversion", explanation: ""},
+            {id: "M27_R2(12)_Q4", topic: "6", class: "M27_R2", question: "28-year-old with G5P0 and multiple surgical TOP admitted in labour at 40 weeks. Delivered baby 3.9kg by SVD. Heavy vaginal bleeding. BP: 80/40, PR: 120. What is the immediate management?", options: ["IV fluid resuscitation", "IV oxygen", "IV tranexamic acid", "Emergency manual removal of placenta"], answer: "A", answerText: "IV fluid resuscitation", explanation: ""},
+            {id: "M27_R2(12)_Q5", topic: "6", class: "M27_R2", question: "A 32-year-old woman suffers 1000mL PPH 15 min after delivery due to uterine atony. Given several drugs and bleeding stops. One hour later, BP: 170/120. Which drug likely responsible?", options: ["Carboprost", "Magnesium sulphate", "Oxytocin", "Syntometrine"], answer: "D", answerText: "Syntometrine", explanation: "Contains ergotamine causing vasoconstriction"},
+            {id: "M27_R2(14)_Q1", topic: "6", class: "M27_R2", question: "A 35-year-old G1P0 with poorly controlled asthma delivered by vacuum extraction. Baby 4.5kg. Primary PPH due to uterine atony. Already given IV syntocinon but continuous heavy bleeding. Placenta complete.", options: ["Expectant management", "IM carboprost", "Oral tranexamic acid", "Rectal misoprostol"], answer: "D", answerText: "Rectal misoprostol", explanation: "Carboprost C/I in asthma"},
+            {id: "M27_R2(14)_Q3", topic: "6", class: "M27_R2", question: "Multiple TOP G5P0 woman with SVD. Placenta delivered. Woman becomes hypotensive with PPH. What is most appropriate management?", options: ["Send for OT +/- placenta removal", "Send for OT +/- repair", "IV Oxytocic", "Uterine compressive suture"], answer: "C", answerText: "IV Oxytocic", explanation: ""},
+            {id: "M27_R2(14)_Q6", topic: "6", class: "M27_R2", question: "A 35-year-old woman with multiple uterine fibroids had full term NSD. Placenta delivered. Ongoing bleeding 600ml. BP: 82/60, PR: 110. Uterus 2 finger breadths above umbilicus, no perineal tear. What is the cause?", options: ["Coagulopathy", "Local trauma", "Multiple fibroids", "Uterine Atony"], answer: "D", answerText: "Uterine Atony", explanation: ""},
+            {id: "M27_R3(1)_Q1", topic: "6", class: "M27_R3", question: "A 24-year-old woman, G5P1, delivered first baby vaginally. 4 previous STP. Difficulty during placenta delivery. Eventually 40 min later. Profuse vaginal bleeding. What was the cause?", options: ["Retained products", "Underlying bleeding tendency", "Uterine atony", "Vaginal tear"], answer: "A", answerText: "Retained products", explanation: ""},
+            {id: "M27_R3(1)_Q6", topic: "6", class: "M27_R3", question: "A 32-year-old woman with known multiple fibroids had precipitous labour. Vaginal delivery complicated by PPH of 3L. What is the underlying cause?", options: ["Atonic uterus", "DIC", "Genital trauma", "Retained products"], answer: "A", answerText: "Atonic uterus", explanation: ""},
+            {id: "M27_R3(8)_Q3", topic: "6", class: "M27_R3", question: "You are on-call intern for PPH patient at 4am. G4P1 with 3 TOPs. Antenatal and delivery smooth. Total loss: 800mL. Suspected retained placenta. Who to call?", options: ["Anesthesiologist", "Extra intern", "Medical officer", "Senior midwife"], answer: "C", answerText: "Medical officer", explanation: ""},
+            {id: "M27_R3(8)_Q4", topic: "6", class: "M27_R3", question: "A 40-year-old grand multiparous woman delivered via NSD of 3kg male. Placenta removed without difficulty. Delivery complicated by PPH of 1.2L. What is the cause?", options: ["AFE", "Genital trauma", "Retained products", "Uterine atony"], answer: "D", answerText: "Uterine atony", explanation: ""},
+            {id: "M28_R1(19)_Q4", topic: "6", class: "M28_R1", question: "A 28-year-old, G5P0, with multiple surgical TOP admitted in labour at 40 weeks. Delivered baby 3.0kg by SVD. Heavy bleeding. BP: 80/40, PR: 120. What is immediate management?", options: ["Emergency placenta removal", "IV fluid resuscitation", "IV oxytocin", "IV tranexamic acid"], answer: "B", answerText: "IV fluid resuscitation", explanation: ""},
+            {id: "M28_R1(19)_Q8", topic: "6", class: "M28_R1", question: "A 30-year-old G1P1 with medical TOP 2 weeks ago. Admitted for increased bleeding (2 pads with clots). Afebrile, BP: 135/85, PR: 105. No cervical excitation. What is the diagnosis?", options: ["Endometritis", "Retained products", "UTI", "Uterine rupture"], answer: "B", answerText: "Retained products", explanation: ""},
+            {id: "M28_R1(18)_Q6", topic: "6", class: "M28_R1", question: "36-year-old with heavy vaginal bleeding following vaginal twin delivery at week 37. Placenta smoothly delivered. No episiotomy. Blood loss 800ml. What is the cause?", options: ["Genital trauma", "Retained placenta", "Uterine atony", "Uterine inversion"], answer: "C", answerText: "Uterine atony", explanation: ""},
+            {id: "M28_R1(20)_Q1", topic: "6", class: "M28_R1", question: "A 32-year-old nulliparous woman has massive obstetric hemorrhage during emergency CS. Develops DIC. Which lab result expected?", options: ["Decreased aPTT", "Increased factor VII", "Increased fibrinogen", "Thrombocytopenia"], answer: "D", answerText: "Thrombocytopenia", explanation: ""},
+            {id: "M28_R1(20)_Q6", topic: "6", class: "M28_R1", question: "A 29-year-old in first pregnancy had full term NSD. Vagina and perineum intact. Placenta failed to deliver after 30 minutes. Heavy loss 1000ml. BP: 70/50, PR: 120. What is management?", options: ["IM carboprost", "Intraumbilical syntocinon", "Urgent manual removal under GA", "Intrauterine balloon"], answer: "C", answerText: "Urgent manual removal under GA", explanation: ""},
+            {id: "M28_R2(9)_Q8", topic: "6", class: "M28_R2", question: "A 35-year-old woman develops painful vulval swelling soon after vaginal delivery. What is the cause?", options: ["Cellulitis", "Dilated varicose veins", "Vulval edema", "Vulval haematoma"], answer: "D", answerText: "Vulval haematoma", explanation: ""},
+            {id: "M28_R2(11)_Q7", topic: "6", class: "M28_R2", question: "A 38-year-old G1P0 in good health admitted for elective CS for twin pregnancy. Total blood loss: 2.6L. Twins: 2.3kg and 2.4kg. Placenta complete. Profuse bleeding in recovery. Uterus well-contracted. What is next management?", options: ["Balloon tamponade", "Examination under anesthesia", "Suction evacuation", "Blood Transfusion"], answer: "D", answerText: "Blood Transfusion", explanation: ""},
+            {id: "M28_R2(12)_Q9", topic: "6", class: "M28_R2", question: "A 43-year-old G6P1 with one previous CS and 4 previous surgical TOP. Successfully underwent TOLAC. Baby delivered 10 min ago, heavy PPH (2L). Uterus contracted, fundus at umbilicus. What is the cause?", options: ["DIC", "Genital tears", "Retained products", "Uterine rupture"], answer: "C", answerText: "Retained products", explanation: ""},
+            {id: "M28_R2(13)_Q1", topic: "6", class: "M28_R2", question: "A 35-year-old G1P0 with poorly controlled asthma delivered by vacuum extraction. Baby 4.5kg. Primary PPH due to uterine atony. Given IV syntocinon but continuous bleeding. Placenta complete.", options: ["Expectant management", "IM carboprost", "Oral tranexamic acid", "Sublingual misoprostol"], answer: "D", answerText: "Sublingual misoprostol", explanation: "Carboprost C/I in asthma"},
+            {id: "M28_R2(13)_Q5", topic: "6", class: "M28_R2", question: "A 32-year-old woman readmitted 10 days after emergency CS with swollen painful calf. Observations stable. Obese, BMI 40. What is the diagnosis?", options: ["Cellulitis", "Deep vein thrombosis", "Muscle strain", "Phlebitis"], answer: "B", answerText: "Deep vein thrombosis", explanation: ""},
+            {id: "M28_R2(14)_Q1", topic: "6", class: "M28_R2", question: "A 38-year-old nulliparous lady had emergency LSCS for PPROM at 35 weeks 1 hour ago. Blood loss: 1L. PR: 130, BP: 80/40, Temp: 37.1°C. Floppy uterus with ongoing bleeding. On syntocinon. Besides fluids, what treatment?", options: ["Carboprost", "Misoprostol", "Synometrine", "Tranexamic acid"], answer: "A", answerText: "Carboprost", explanation: ""},
+            {id: "M28_R2(14)_Q4", topic: "6", class: "M28_R2", question: "A 36-year-old G1P0 admitted for leaking at 36 weeks. Gush of clear fluid with continuous leaking. Irregular contractions. Soft, nontender uterus. Cephalic, 5/5 above brim. NST: baseline 150, variability 5-10, accelerations, recurrent variable decel to 90 for 2 min. What is diagnosis?", options: ["Cord prolapse", "Placenta previa", "Placental abruption", "Uterine rupture"], answer: "A", answerText: "Cord prolapse", explanation: ""},
 
-    function deselectAllTypes() {
-      const checkboxes = document.querySelectorAll('input[name="type"]');
-      checkboxes.forEach(cb => cb.checked = false);
-    }
+            // 7.1 Abnormal Uterine Bleeding
+            {id: "M27_R1(23)_Q4", topic: "7.1", class: "M27_R1", question: "A 22-year-old student presented with irregular menses (90-180 day cycle). Pelvic US found polycystic ovaries. Which condition can be prevented by progestogen withdrawal bleeding?", options: ["Breast cancer", "Diabetes mellitus", "Endometrial cancer", "Ovarian cancer"], answer: "C", answerText: "Endometrial cancer", explanation: ""},
 
-    function selectAllBlocks() {
-      const checkboxes = document.querySelectorAll('input[name="block"]');
-      checkboxes.forEach(cb => cb.checked = true);
-    }
+            // 7.2 Amenorrhea
+            {id: "M28_R1(20)_Q10", topic: "7.2", class: "M28_R1", question: "A 51-year-old woman had total hysterectomy and bilateral salpingo-oophorectomy for fibroids 6 weeks ago. Pathology: benign. Severe hot flushes affecting sleep. Good health, BMI 23, non-smoker. What management?", options: ["Oral estrogen only", "Oral estrogen and progestogen", "Oral progestogen only", "Vaginal estrogen"], answer: "A", answerText: "Oral estrogen only", explanation: "Post-hysterectomy: estrogen only"},
 
-    function deselectAllBlocks() {
-      const checkboxes = document.querySelectorAll('input[name="block"]');
-      checkboxes.forEach(cb => cb.checked = false);
-    }
+            // 7.3 Dysmenorrhea
+            {id: "M27_R2(12)_Q7", topic: "7.3", class: "M27_R2", question: "A 15-year-old girl admitted for acute retention of urine and lower abdominal pain. No menarche but monthly pain for 4 months. Normal development. What is the diagnosis?", options: ["MRKH syndrome", "Red degeneration of fibroid", "Imperforate hymen", "Fitz-Hugh-Curtis syndrome"], answer: "C", answerText: "Imperforate hymen", explanation: ""},
+            {id: "M27_R3(8)_Q6", topic: "7.3", class: "M27_R3", question: "A 15-year-old girl admitted for acute retention of urine and lower abdominal pain. No menarche but monthly pain for 4 months. On exam: 16 weeks' pelvic mass, bluish bulge from vagina on Valsalva. What is diagnosis?", options: ["Fitz-Hugh-Curtis syndrome", "Imperforate hymen", "MRKH syndrome", "Red degeneration of fibroids"], answer: "B", answerText: "Imperforate hymen", explanation: ""},
+            {id: "M27_R2(14)_Q7", topic: "7.3", class: "M27_R2", question: "Menarche at 13, 6 weeks abdominal pain, bluish bulge at introitus on straining, normal pubic hair. What is the diagnosis?", options: ["Imperforate hymen", "MRKH", "Transverse septum"], answer: "A", answerText: "Imperforate hymen", explanation: ""},
+            {id: "M28_R1(20)_Q8", topic: "7.3", class: "M28_R1", question: "A 15-year-old girl presented with pelvic mass and acute retention of urine. No menarche. Past 6 months: pain every few weeks (2-3 days). Normal development. 12 weeks' mass, bluish bulge at introitus on straining. What is diagnosis?", options: ["Androgen insensitivity", "Imperforate hymen", "Ovarian tumour", "Premature ovarian insufficiency"], answer: "B", answerText: "Imperforate hymen", explanation: ""},
 
-    function resetProgress() {
-      shownLectures = [];
-      shownLectureDetails = [];
-      document.getElementById('resetBtn').classList.remove('show');
-      document.getElementById('counter').textContent = '';
-      updateHistoryDisplay();
-      alert('Progress has been reset. All lectures can be shown again.');
-    }
+            // 8. Vaginal Discharge
+            {id: "M27_R1(22)_Q9", topic: "8", class: "M27_R1", question: "A 30-year-old pregnant woman admitted at 38 weeks with ROM. GBS screening at 35 weeks: positive. Uneventful pregnancy. No NKDA. Exam: appropriate size, cephalic, normal FHR, clear liquor. Afebrile. Which is appropriate action?", options: ["Discharge and return with pain", "Give IV benzylpenicillin after checking allergy", "Give oral penicillin after checking allergy", "Emergency CS immediately"], answer: "B", answerText: "Give IV benzylpenicillin after checking allergy", explanation: ""},
+            {id: "M27_R2(12)_Q3", topic: "8", class: "M27_R2", question: "A 19-year-old bartender G3P0 with 3 TOP admitted with severe bilateral lower abdominal pain and fever. Multiple partners. BP: 90/45, PR: 124, Temp: 39°C. Lower tenderness, no guarding. Cervical excitation. Pregnancy test negative. What is management?", options: ["Laparotomy", "Resuscitation and Antibiotics", "Emergency contraception", "US pelvis"], answer: "B", answerText: "Resuscitation and Antibiotics", explanation: ""},
+            {id: "M27_R2(12)_Q9", topic: "8", class: "M27_R2", question: "Which of the following is an adverse factor for natural defense mechanism in female genitals?", options: ["Alkaline lochia", "Apposition of labia and vagina", "Vaginal microbiome", "Stratified squamous epithelium"], answer: "A", answerText: "Alkaline lochia", explanation: ""},
+            {id: "M27_R2(14)_Q9", topic: "8", class: "M27_R2", question: "Strawberry cervix sign indicates?", options: ["Candida albicans", "Gonorrhea", "Trichomonas", "Chlamydia"], answer: "C", answerText: "Trichomonas", explanation: ""},
+            {id: "M27_R3(8)_Q7", topic: "8", class: "M27_R3", question: "A 23-year-old woman admitted for lower abdominal pain and fever. Sexually active, 3 partners. Lower tenderness. Foul-smelling discharge on speculum, cervical excitation on exam. Which is appropriate management?", options: ["Single dose IM ceftriaxone + doxycycline + metronidazole", "Single dose oral azithromycin", "Single dose oral metronidazole", "IV ceftriaxone + oral doxycycline"], answer: "D", answerText: "IV ceftriaxone + oral doxycycline", explanation: "Acute PID requiring admission"},
+            {id: "M28_R1(18)_Q9", topic: "8", class: "M28_R1", question: "What is an adverse factor in vaginal infection defense mechanism?", options: ["Alkaline lochia", "Apposition of labia and vagina", "Vaginal microbiome", "Stratified squamous epithelium"], answer: "A", answerText: "Alkaline lochia", explanation: ""},
+            {id: "M28_R1(20)_Q2", topic: "8", class: "M28_R1", question: "A 20-year-old woman presented with lower abdominal pain and fever. Multiple partners. Pain started 1 day ago, persistent. BP: 120/80, PR: 110, Temp: 39°C. Lower tenderness but no peritoneal signs. Cervical excitation. What is diagnosis?", options: ["Acute appendicitis", "Acute PID", "Ovary cyst torsion", "Ruptured ectopic pregnancy"], answer: "B", answerText: "Acute PID", explanation: ""},
 
-    function getLectureType(code) {
-      if (code.startsWith('GC')) return 'GC';
-      if (code.startsWith('SS')) return 'SS';
-      if (code.startsWith('AR') || code.startsWith('BR')) return 'Recall';
-      return '';
-    }
+            // 9. Gynaecological Neoplasms
+            {id: "M27_R1(21)_Q6", topic: "9", class: "M27_R1", question: "A 62-year-old attended A&E for abdominal pain. Generalized tenderness, 24-week pelvic mass. US: 18cm unilocular right ovarian cyst, no solid area. What is appropriate management?", options: ["Laparoscopic ovarian cystectomy", "Laparoscopic bilateral salpingo-oophorectomy", "Laparotomy and bilateral salpingo-oophorectomy", "Refer oncology"], answer: "C", answerText: "Laparotomy and bilateral salpingo-oophorectomy", explanation: "Large cyst, elderly, acute presentation"},
+            {id: "M27_R1(21)_Q7", topic: "9", class: "M27_R1", question: "A 45-year-old woman presented with postcoital bleeding. Exam: 1cm exophytic growth on cervix. Which investigation next?", options: ["Cervical biopsy", "Cervical smear", "Colposcopy", "HPV test"], answer: "A", answerText: "Cervical biopsy", explanation: "Visible lesion requires direct biopsy"},
+            {id: "M27_R1(22)_Q4", topic: "9", class: "M27_R1", question: "A 40-year-old woman presented with cervical smear showing low-grade squamous intraepithelial lesion. What is appropriate management?", options: ["Perform colposcopy", "Repeat cervical smear today", "Repeat cervical smear 4 months later", "Repeat cervical smear 6 months later"], answer: "A", answerText: "Perform colposcopy", explanation: ""},
+            {id: "M27_R1(22)_Q6", topic: "9", class: "M27_R1", question: "A 35-year-old woman presents to A&E with severe abdominal pain. History of ovarian cystectomy for endometriotic cysts 2 years ago. PR: 100, BP: 90/50. Pregnancy test negative. What is diagnosis?", options: ["Acute appendicitis", "Ovarian cyst complication", "Ruptured ectopic pregnancy", "UTI"], answer: "B", answerText: "Ovarian cyst complication", explanation: ""},
+            {id: "M27_R1(22)_Q7", topic: "9", class: "M27_R1", question: "A 35-year-old woman presents to A&E with severe lower abdominal pain. Pregnancy test negative. History of 3cm left dermoid cyst. Suspected ovarian torsion. Which spinal segments nerve to ovaries?", options: ["S2-S4", "T11-T12", "L1", "T9-T10"], answer: "D", answerText: "T9-T10", explanation: ""},
+            {id: "M27_R1(23)_Q8", topic: "9", class: "M27_R1", question: "A 23-year-old attended A&E for abdominal pain. Generalized tenderness, 24-week pelvic mass. US: 18cm multilocular left cyst, no solid area. What is appropriate management?", options: ["Laparoscopic cystectomy", "Laparoscopic salpingo-oophorectomy", "Laparotomy with cystectomy", "Staging laparotomy"], answer: "C", answerText: "Laparotomy with cystectomy", explanation: "Large multilocular cyst requires open approach"},
+            {id: "M27_R1(23)_Q10", topic: "9", class: "M27_R1", question: "A 55-year-old woman presents with intermittent postmenopausal vaginal bleeding for 6 months. Married, 2 children. Last smear 4 years ago (normal). Speculum: 2cm exophytic growth on posterior cervix with contact bleeding. What is diagnosis?", options: ["Cervical cancer", "Cervical ectropion", "Cervical fibroid", "Cervical polyp"], answer: "A", answerText: "Cervical cancer", explanation: ""},
+            {id: "M27_R2(14)_Q10", topic: "9", class: "M27_R2", question: "Surgery for endometrial cancer with no fertility wish. What is the procedure?", options: ["Vaginal hysterectomy", "TAH + BSO", "Myomectomy", "Endometrial ablation"], answer: "B", answerText: "TAH + BSO", explanation: ""},
+            {id: "M27_R3(1)_Q10", topic: "9", class: "M27_R3", question: "A 30-year-old woman just completed 3 doses of HPV vaccine. Good health. Last smear 1 year ago (first, negative). When next cervical smear?", options: ["No need for further smear", "Now", "One year later", "Two years later"], answer: "B", answerText: "Now", explanation: ""},
+            {id: "M27_R3(8)_Q5", topic: "9", class: "M27_R3", question: "A 55-year-old woman complained of postmenopausal vaginal bleeding for 4 months. Married, 4 children, good health. Last smear 15 years ago (normal). Speculum: 3cm exophytic growth on anterior cervix with contact bleeding. Which is most important initial investigation?", options: ["Cervical biopsy", "Cervical smear", "Colposcopy", "Endometrial aspirate"], answer: "A", answerText: "Cervical biopsy", explanation: "Visible lesion requires direct biopsy"},
+            {id: "M27_R3(8)_Q10", topic: "9", class: "M27_R3", question: "A 21-year-old woman incidentally found to have left ovarian cyst (2x2.5x1cm) with thin septae, no vascular flow. Regular menses, no dysmenorrhea. Which is most appropriate management?", options: ["Check CA-125", "Combined oral contraceptive", "Laparoscopic cystectomy", "Observation and repeat US in 6 months"], answer: "D", answerText: "Observation and repeat US in 6 months", explanation: "Benign features, small lesion"},
+            {id: "M28_R1(19)_Q7", topic: "9", class: "M28_R1", question: "A 29-year-old woman attended A&E for acute abdominal pain and vomiting. Never sexually active. Abdominal exam: guarding and rigidity over left lower quadrant. What is diagnosis?", options: ["Acute appendicitis", "Diverticulitis", "Ovarian cyst torsion", "PID"], answer: "C", answerText: "Ovarian cyst torsion", explanation: ""},
+            {id: "M28_R1(18)_Q5", topic: "9", class: "M28_R1", question: "38-year-old admitted for acute onset lower abdominal pain with nausea. RLQ tenderness with guarding. Recent pelvic US 2 months ago: 6cm ovarian cyst. Afebrile. Pregnancy test negative. What is management?", options: ["Laparoscopic cystectomy", "Laparoscopic salpingo-oophorectomy", "Repeat US in 4 months", "US-guided aspiration"], answer: "A", answerText: "Laparoscopic cystectomy", explanation: ""},
+            {id: "M28_R1(20)_Q9", topic: "9", class: "M28_R1", question: "A 66-year-old woman complained of abdominal swelling for 3 months. Abdominal exam: 18 weeks' mass. US: small free fluid, 10cm cystic lesion with 1cm solid area. Both ovaries not visualized. Which is appropriate management?", options: ["CT scan", "Diagnostic laparoscopy and biopsy", "Repeat US 3-4 months later", "US-guided biopsy"], answer: "A", answerText: "CT scan", explanation: "Suspect malignancy; need staging"},
+            {id: "M28_R2(9)_Q1", topic: "9", class: "M28_R2", question: "An 18-year-old lady admitted for sudden onset abdominal pain. Tenderness and rigidity over right abdomen. Suspected ovarian cyst torsion. What is the spinal segment nerve supply?", options: ["L2-L3", "S2-S4", "T9-T10", "T11-T12"], answer: "C", answerText: "T9-T10", explanation: ""},
+            {id: "M28_R2(9)_Q3", topic: "9", class: "M28_R2", question: "A 68-year-old woman presented to gyn clinic for vaginal spotting since 2 weeks. LMP 15 years ago. Good health. Married with 2 vaginal deliveries. Regular checkup, normal. What is appropriate investigation?", options: ["Cervical smear", "Complete blood count", "Endometrial aspirate", "Pelvic US"], answer: "C", answerText: "Endometrial aspirate", explanation: ""},
+            {id: "M28_R2(12)_Q5", topic: "9", class: "M28_R2", question: "A 62-year-old woman, sexually inactive, complained of postmenopausal bleeding for 4 months. Enlarged uterus 12 weeks' size. Cannot tolerate vaginal exam. US: 12cm uterus, 7mm endometrial thickness. What is appropriate management?", options: ["Hysteroscopy and endometrial biopsy", "Observation and repeat US in 6 months", "Oral progestagen", "Total hysterectomy and salpingo-oophorectomy"], answer: "A", answerText: "Hysteroscopy and endometrial biopsy", explanation: ""},
+            {id: "M28_R2(12)_Q8", topic: "9", class: "M28_R2", question: "A 23-year-old nulliparous woman presented with chronic pelvic pain. US: increasing size of 10cm endometrioma in right ovary. What is best management?", options: ["Combined oral contraceptive", "Laparoscopic cystectomy", "Laparoscopic salpingo-oophorectomy", "Repeat routine pelvic US"], answer: "B", answerText: "Laparoscopic cystectomy", explanation: "Young nulliparous; preserve ovary"},
+            {id: "M28_R2(13)_Q7", topic: "9", class: "M28_R2", question: "Ms Chan is 53 years old with persistent vaginal bleeding for 2 months. Menopause at 49. Latest smear 1 year ago (negative). Family history colon cancer. Obese, BMI 34. Pelvic exam: bulky uterus. Transvaginal US: 14mm endometrial thickness with multicystic appearance. What is diagnosis?", options: ["Atrophic vaginitis", "Cervical polyp", "Endometrial cancer", "Endometritis"], answer: "C", answerText: "Endometrial cancer", explanation: ""},
+            {id: "M28_R2(13)_Q8", topic: "9", class: "M28_R2", question: "A 12-year-old girl presents to A&E with lower abdominal pain. Large pelvic mass on exam. Transabdominal US: bilateral cystic and solid ovarian tumours. What is diagnosis?", options: ["Epithelial ovarian cancer", "Mature cystic teratoma", "Ovarian fibroadenoma", "Sex cord tumour"], answer: "B", answerText: "Mature cystic teratoma", explanation: ""},
+            {id: "M28_R2(13)_Q9", topic: "9", class: "M28_R2", question: "A 25-year-old woman presents with sudden-onset left lower quadrant pain with nausea and vomiting. Sexually active. Uses Mirena IUD. Otherwise healthy. Afebrile. Abdominal exam: left lower quadrant tenderness, no rebound. Pelvic: normal cervix, no discharge, no cervical excitation, fullness at left adnexa. Pregnancy test negative. What is diagnosis?", options: ["Diverticulitis", "Ectopic pregnancy", "Ovarian torsion", "Tubo-ovarian abscess"], answer: "C", answerText: "Ovarian torsion", explanation: ""},
+            {id: "M28_R2(14)_Q3", topic: "9", class: "M28_R2", question: "A 30-year-old woman attended gyn outpatient clinic with incidental US finding of 5cm dermoid ovarian cyst. Asymptomatic. What is appropriate management plan?", options: ["Arrange elective laparoscopic cystectomy", "Arrange emergency laparoscopic cystectomy", "Arrange further imaging with MRI", "Check serum CA125"], answer: "A", answerText: "Arrange elective laparoscopic cystectomy", explanation: ""},
 
-    function updateCounter() {
-      const total = currentFilteredLectures.length;
-      const shown = shownLectures.filter(code => 
-        currentFilteredLectures.some(lec => lec.code === code)
-      ).length;
-      
-      document.getElementById('counter').textContent = 
-        `Shown: ${shown} / ${total} lectures`;
-      
-      if (shown === total && total > 0) {
-        document.getElementById('resetBtn').classList.add('show');
-      }
-    }
+            // 10.1 Urinary Incontinence
+            {id: "M27_R1(21)_Q8", topic: "10.1", class: "M27_R1", question: "A 60-year-old woman with good health presented with urinary incontinence for 1 year. No dysuria. Incontinence occurs with coughing, sneezing, and urgency. MSU culture negative. What is the diagnosis?", options: ["Mixed urinary incontinence", "Overflow urinary incontinence", "Stress urinary incontinence", "Urgency urinary incontinence"], answer: "A", answerText: "Mixed urinary incontinence", explanation: "Stress + urgency = mixed"},
+            {id: "M27_R1(21)_Q5", topic: "10.1", class: "M27_R1", question: "A 36-year-old G1P0 admitted at 29 weeks for gush of fluid 2 hours ago. Speculum: clear liquor leaking. US: breech, normal, reduced liquor. Hospitalized. 5 days later, mass from vagina while straining. Loop of cord without pulsation, no fetal heart. What is diagnosis?", options: ["Early neonatal death", "Neonatal death", "Silent miscarriage", "Stillbirth"], answer: "D", answerText: "Stillbirth", explanation: ""},
+            {id: "M28_R2(12)_Q7", topic: "10.1", class: "M28_R2", question: "Mrs Chan complained of urinary incontinence on coughing, confirmed during physical exam. BMI 35. What is diagnosis?", options: ["Overflow urinary incontinence", "Physiological urinary incontinence", "Stress urinary incontinence", "Urgency urinary incontinence"], answer: "C", answerText: "Stress urinary incontinence", explanation: ""},
 
-    function updateHistoryDisplay() {
-      const historyList = document.getElementById('historyList');
-      
-      if (shownLectureDetails.length === 0) {
-        historyList.innerHTML = '<div class="history-empty">No lectures viewed yet</div>';
-        return;
-      }
+            // 10.2 POP
+            {id: "M27_R1(23)_Q9", topic: "10.2", class: "M27_R1", question: "A 60-year-old patient presented complaining of lump at introitus on straining. You're about to examine her. What position should patient adopt?", options: ["Lithotomy position", "Prone position", "Supine position", "Orthopneic position"], answer: "A", answerText: "Lithotomy position", explanation: ""},
+            {id: "M27_R2(12)_Q10", topic: "10.2", class: "M27_R2", question: "A 60-year-old patient presented with lump at introitus on straining. Diagnosed with POP. Doesn't want surgery. What is the management?", options: ["Conservative treatment", "Pessary", "Sacrocolpopexy", "Vaginal hysterectomy with pelvic floor repair"], answer: "B", answerText: "Pessary", explanation: ""},
 
-      historyList.innerHTML = shownLectureDetails.map((lecture, index) => `
-        <div class="history-item">
-          <div class="history-item-header">
-            <div class="history-item-number">${index + 1}.</div>
-            <div class="history-item-code">${lecture.code}</div>
-            <div class="history-item-block">${lecture.block}</div>
-          </div>
-          <div class="history-item-title">${lecture.title}</div>
-        </div>
-      `).join('');
-    }
+            // 11. Fertility and Contraception
+            {id: "M27_R3(8)_Q9", topic: "11", class: "M27_R3", question: "A 30-year-old nulliparous woman attends infertility clinic with 33-year-old husband. Regular 28-day cycles. Husband smokes half pack/day for 10 years. Trying 1 year. Semen: 8.6M/mL (ref ≥16), motility 28% (ref ≥30%), morphology 3% (ref ≥4%). Which is appropriate investigation?", options: ["Second semen analysis", "Serum FSH", "Serum prolactin", "Serum testosterone"], answer: "A", answerText: "Second semen analysis", explanation: "Abnormal semen needs repeat"},
+            {id: "M27_R1(19)_Q9", topic: "11", class: "M27_R1", question: "A 30-year-old nulliparous woman seen for primary infertility 2 years. Irregular cycles (60-120 days). Severe dysmenorrhea in teenage, improved. Husband semen analysis x2: Conc: 12.2, 17.5 (ref ≥16); Motility: 45%, 30% (ref ≥30%); Morph: 2%, 6% (ref ≥4%). What is the cause?", options: ["Anovulation", "Endometriosis", "Male factor", "Unexplained cause"], answer: "A", answerText: "Anovulation", explanation: "Irregular cycles = anovulation"},
+            {id: "M28_R1(18)_Q8", topic: "11", class: "M28_R1", question: "35-year-old nulliparous woman at infertility clinic with 38-year-old husband. Regular 28-day cycles. Husband sales worker, smokes half pack/day for 10 years. Trying 3 years. Semen: 2.1M/mL (ref >16), motility 5% (ref >30%), morph 1% (ref >4%). Repeat similar. What to do?", options: ["Testosterone injection", "IVF", "Intra-uterine insemination", "Vitamin supplements"], answer: "B", answerText: "IVF", explanation: "Severely abnormal semen → IVF"},
 
-    function generateLecture() {
-      // Check lecture types
-      const typeCheckboxes = document.querySelectorAll('input[name="type"]:checked');
-      if (typeCheckboxes.length === 0) {
-        alert("Please select at least one lecture type (GC, SS, or Recall).");
-        return;
-      }
+            // 12.1 Miscarriage and Ectopic
+            {id: "M27_R1(21)_Q4", topic: "12.1", class: "M27_R1", question: "A 30-year-old G4P0 attended A&E with abdominal pain and light vaginal bleeding. Irregular cycles, LMP 4 weeks ago. BP: 100/80, PR: 80. Lower tenderness, no peritoneal signs. What is appropriate first investigation?", options: ["CBC", "CT abdomen/pelvis", "Type & screen", "Urine pregnancy test"], answer: "D", answerText: "Urine pregnancy test", explanation: ""},
+            {id: "M27_R1(21)_Q5", topic: "12.1", class: "M27_R1", question: "A 36-year-old G1P0 admitted at 29 weeks for gush of fluid 2 hours ago. Active fetal movement. Speculum: clear liquor leaking. US: breech, normal, reduced liquor. Hospitalized. 5 days later, mass from vagina while straining. Loop of cord without pulsation, no heart. What is diagnosis?", options: ["Early neonatal death", "Neonatal death", "Silent miscarriage", "Stillbirth"], answer: "D", answerText: "Stillbirth", explanation: ""},
+            {id: "M27_R1(22)_Q1", topic: "12.1", class: "M27_R1", question: "A 30-year-old woman with history of acute PID 5 years ago attended A&E for generalized abdominal pain and mild vaginal bleeding. LMP 7 weeks ago. Pregnancy test positive. BP: 80/40, PR: 112. Generalized tenderness with guarding. What is management?", options: ["Admit for observation", "Emergency laparotomy", "Urgent CT abdomen/pelvis", "Urgent pelvic US"], answer: "B", answerText: "Emergency laparotomy", explanation: "Ruptured ectopic with shock"},
+            {id: "M27_R1(23)_Q3", topic: "12.1", class: "M27_R1", question: "A 28-year-old woman with history of Chlamydia attended A&E with severe abdominal pain. Mild vaginal bleeding. PR: 120, BP: 62/42. Pale. Distended abdomen with generalized tenderness. Pregnancy test positive. What is diagnosis?", options: ["Acute PID", "Complete miscarriage", "Ruptured ectopic pregnancy", "Silent miscarriage"], answer: "C", answerText: "Ruptured ectopic pregnancy", explanation: ""},
+            {id: "M27_R2(12)_Q3", topic: "12.1", class: "M27_R2", question: "35-year-old women now 8 weeks pregnant. Conceived by IVF for unexplained infertility. BP: 80/40, PR: 110. Transvaginal US: empty uterus and empty POD. What is diagnosis?", options: ["Complete miscarriage", "Ectopic pregnancy", "Silent miscarriage", "Threatened miscarriage"], answer: "B", answerText: "Ectopic pregnancy", explanation: ""},
+            {id: "M27_R2(14)_Q5", topic: "12.1", class: "M27_R2", question: "Generalized lower abdominal pain, tenderness, guarding and rebound. Pregnancy test positive. BP: 80/50, PR: 120. What is the management?", options: ["Pelvic US", "Urgent CT", "Urgent MRI", "Urgent operation"], answer: "D", answerText: "Urgent operation", explanation: ""},
+            {id: "M27_R2(14)_Q8", topic: "12.1", class: "M27_R2", question: "IVF G1P0, sudden onset right lower abdominal pain and shoulder tip pain. What is the diagnosis?", options: ["Ectopic pregnancy", "Acute appendicitis"], answer: "A", answerText: "Ectopic pregnancy", explanation: "Shoulder tip pain = hemoperitoneum"},
+            {id: "M27_R3(1)_Q3", topic: "12.1", class: "M27_R3", question: "A 32-year-old woman attended A&E for sudden onset generalized abdominal pain. Mild vaginal bleeding and shoulder pain. Pregnancy test positive. BP: 80/50, PR: 120. Generalized tenderness with guarding and rigidity. What is diagnosis?", options: ["Acute appendicitis", "Acute PID", "Ruptured ectopic pregnancy", "Torsion of ovarian cyst"], answer: "C", answerText: "Ruptured ectopic pregnancy", explanation: ""},
+            {id: "M27_R3(1)_Q5", topic: "12.1", class: "M27_R3", question: "A 30-year-old referred for suspected ectopic pregnancy. Planned and wanted pregnancy. Pelvic US: 3cm right ectopic with positive fetal heart. hCG: 3000 U/mL. History of laparoscopic left salpingectomy. What is management?", options: ["IM methotrexate", "IV methotrexate", "Laparoscopic right salpingectomy", "Laparoscopic right salpingotomy"], answer: "D", answerText: "Laparoscopic right salpingotomy", explanation: "Viable ectopic, low hCG, wants pregnancy"},
+            {id: "M28_R1(19)_Q1", topic: "12.1", class: "M28_R1", question: "A 34-year-old G1P0 admitted for acute onset lower abdominal pain and mild vaginal bleeding. No bowel/urinary symptoms. Pregnancy test positive. BP: 90/40, PR: 130. Lower tenderness with guarding and rebound. Marked cervical excitation. What is management?", options: ["Laparotomy", "Pain relief", "Take blood for hCG", "US pelvis"], answer: "A", answerText: "Laparotomy", explanation: ""},
+            {id: "M28_R1(18)_Q3", topic: "12.1", class: "M28_R1", question: "25-year-old woman with past history of PID attends A&E with severe abdominal pain. Mild vaginal bleeding, LMP 7 days ago. Afebrile, PR: 120, BP: 60/40, distended tender abdomen. What is the diagnosis?", options: ["Acute PID", "Threatened miscarriage", "Inevitable miscarriage", "Ruptured ectopic pregnancy"], answer: "D", answerText: "Ruptured ectopic pregnancy", explanation: ""},
+            {id: "M28_R1(18)_Q7", topic: "12.1", class: "M28_R1", question: "25-year-old at gyn ward with suspected ruptured ectopic pregnancy with stable vitals. Urgent laparoscopic operation being arranged. What are the advantages?", options: ["Better hand-eye coordination", "More degrees of freedom", "Shorter operative time", "Shorter operative stay"], answer: "D", answerText: "Shorter operative stay", explanation: ""},
+            {id: "M28_R1(20)_Q5", topic: "12.1", class: "M28_R1", question: "A 24-year-old woman attended early pregnancy clinic for abdominal pain. G1P0. IVF pregnancy. Sudden onset abdominal and shoulder tip pain. Right lower quadrant tenderness. What is diagnosis?", options: ["Acute appendicitis", "Ectopic pregnancy", "Inevitable miscarriage", "Threatened miscarriage"], answer: "B", answerText: "Ectopic pregnancy", explanation: ""},
+            {id: "M28_R2(9)_Q2", topic: "12.1", class: "M28_R2", question: "A 20-year-old woman admitted for mild vaginal bleeding. Pregnancy test positive, LMP 6 weeks ago. BP: 120/74, PR: 60. Soft, non-tender abdomen. Speculum: closed cervix, mild bleeding. What is appropriate plan?", options: ["Arrange diagnostic laparoscopy", "Arrange suction evacuation", "Arrange pelvic US", "Discharge and refer to antenatal"], answer: "C", answerText: "Arrange pelvic US", explanation: ""},
+            {id: "M28_R2(9)_Q5", topic: "12.1", class: "M28_R2", question: "A 30-year-old G4P0 attended A&E with abdominal pain and light bleeding. LMP 5 weeks ago. BP: 90/60, PR: 120. Peritoneal signs. Closed cervix, right adnexal mass. Pregnancy test positive. What is management?", options: ["CBC", "hCG", "Emergency laparotomy", "Emergency suction evacuation"], answer: "C", answerText: "Emergency laparotomy", explanation: ""},
+            {id: "M28_R2(9)_Q6", topic: "12.1", class: "M28_R2", question: "A 30-year-old G2P0 attended A&E with lower abdominal pain. LMP 5 weeks ago. BP: 100/80, PR: 110, Temp: 39°C. Peritoneal signs and cervical excitation. What condition most likely in future?", options: ["DUB", "Ectopic pregnancy", "Endometriosis", "Secondary amenorrhea"], answer: "B", answerText: "Ectopic pregnancy", explanation: "PID increases ectopic risk"},
+            {id: "M28_R2(12)_Q6", topic: "12.1", class: "M28_R2", question: "Ms Chan, 42 years old, presented with dizziness and palpitations. LMP 24 days ago. Heavy menstrual flow. Physical exam: 16-week sized mass, soft, non-tender abdomen. What is diagnosis?", options: ["Endometrial polyp", "Ovarian tumour", "Threatened miscarriage", "Uterine fibroid"], answer: "D", answerText: "Uterine fibroid", explanation: ""},
+            {id: "M28_R2(14)_Q2", topic: "12.1", class: "M28_R2", question: "A 20-year-old drug addict with history of PID presented to A&E with sudden onset abdominal pain 2 hours and abnormal vaginal spotting. What is first single most important investigation?", options: ["Abdominal X-ray", "Cervical smear", "Urine pregnancy test", "Urine toxicology"], answer: "C", answerText: "Urine pregnancy test", explanation: ""},
+            {id: "M28_R2(14)_Q6", topic: "12.1", class: "M28_R2", question: "A 28-year-old admitted for sudden onset lower abdominal pain 4 hours. Irregular menses, LMP 5 weeks ago. Generalized tenderness, guarding, rebound. BP: 80/40, PR: 120. Pregnancy test positive. US: free fluid at POD, left adnexal mass. What is appropriate treatment?", options: ["Emergency laparoscopy +/- salpingo-oophorectomy", "Emergency laparotomy +/- salpingectomy", "Emergency laparotomy +/- salpingo-oophorectomy", "Systemic methotrexate"], answer: "B", answerText: "Emergency laparotomy +/- salpingectomy", explanation: ""},
 
-      // Check blocks
-      const blockCheckboxes = document.querySelectorAll('input[name="block"]:checked');
-      if (blockCheckboxes.length === 0) {
-        alert("Please select at least one block.");
-        return;
-      }
+            // 12.2 TOP
+            {id: "M27_R1(22)_Q5", topic: "12.2", class: "M27_R1", question: "A 24-year-old woman, G1P0, referred from Family Planning one day after suction evacuation for unwanted pregnancy. \"give-way\" sensation by surgeon. Mild vaginal bleeding, otherwise well. BP: 120/80, PR: 80. What is diagnosis?", options: ["Bowel injury", "Bladder injury", "Hemoperitoneum", "Uterine perforation"], answer: "D", answerText: "Uterine perforation", explanation: ""},
+        ];
 
-      const selectedTypes = Array.from(typeCheckboxes).map(cb => cb.value);
-      const selectedBlocks = Array.from(blockCheckboxes).map(cb => cb.value);
+        function init() {
+            document.getElementById('total').textContent = questions.length;
+            filterQuestions();
+        }
 
-      // Filter by both type and block
-      currentFilteredLectures = lectures.filter(lec => {
-        const lectureType = getLectureType(lec.code);
-        return selectedTypes.includes(lectureType) && selectedBlocks.includes(lec.block);
-      });
+        function filterQuestions() {
+            const classVal = document.getElementById('classFilter').value;
+            const topicVal = document.getElementById('topicFilter').value;
+            const searchVal = document.getElementById('searchBox').value.toLowerCase();
 
-      if (currentFilteredLectures.length === 0) {
-        alert("No lectures found for the selected types and blocks.");
-        return;
-      }
+            const filtered = questions.filter(q => {
+                const classMatch = !classVal || q.class === classVal;
+                const topicMatch = !topicVal || q.topic === topicVal;
+                const searchMatch = !searchVal || 
+                    q.question.toLowerCase().includes(searchVal) ||
+                    q.answerText.toLowerCase().includes(searchVal) ||
+                    q.id.toLowerCase().includes(searchVal);
+                return classMatch && topicMatch && searchMatch;
+            });
 
-      const availableLectures = currentFilteredLectures.filter(lec => !shownLectures.includes(lec.code));
+            displayQuestions(filtered);
+            document.getElementById('count').textContent = filtered.length;
+        }
 
-      let randomLecture;
-      
-      if (availableLectures.length === 0) {
-        alert("🎉 Congratulations! You have gone through every lecture in the selected types and blocks. The list will now reset.");
-        shownLectures = [];
-        shownLectureDetails = [];
-        document.getElementById('resetBtn').classList.remove('show');
-        updateHistoryDisplay();
-        randomLecture = currentFilteredLectures[Math.floor(Math.random() * currentFilteredLectures.length)];
-      } else {
-        randomLecture = availableLectures[Math.floor(Math.random() * availableLectures.length)];
-      }
+        function displayQuestions(filtered) {
+            const container = document.getElementById('questions');
+            container.innerHTML = '';
 
-      shownLectures.push(randomLecture.code);
-      shownLectureDetails.push({
-        code: randomLecture.code,
-        block: randomLecture.block,
-        title: randomLecture.title
-      });
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty">No questions found</div>';
+                return;
+            }
 
-      document.getElementById("result").innerHTML = `
-        <div class="lecture-header">
-          <div class="lecture-code">${randomLecture.code}</div>
-          <div class="lecture-block">${randomLecture.block}</div>
-        </div>
-        <div class="lecture-title">${randomLecture.title}</div>
-      `;
+            filtered.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                
+                const optionsHtml = q.options.length > 0 ? `
+                    <div class="options">
+                        ${q.options.map((o, i) => {
+                            const letter = String.fromCharCode(65 + i);
+                            return `
+                                <div class="option-item" data-answer="${letter}" data-correct="${q.answer}" data-index="${index}">
+                                    <strong>${letter}.</strong> ${o}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                ` : '';
 
-      updateCounter();
-      updateHistoryDisplay();
-    }
-  </script>
+                card.innerHTML = `
+                    <div class="question-header" onclick="this.parentElement.classList.toggle('open')">
+                        <div>
+                            <div class="question-id">${q.id}</div>
+                            <div class="question-topic">Topic ${q.topic} • ${q.class}</div>
+                        </div>
+                        <div class="arrow">▼</div>
+                    </div>
+                    <div class="question-content">
+                        <div class="question-text">${q.question}</div>
+                        ${optionsHtml}
+                        <button class="answer-btn" onclick="toggleAnswer(this, ${index})">Show Answer</button>
+                        <div class="answer-box hidden" data-index="${index}">
+                            <div class="answer-text">Answer: ${q.answer} - ${q.answerText}</div>
+                            ${q.explanation ? `<div class="explanation">${q.explanation}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
 
+            // Add click handlers to options
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    checkAnswer(e, this);
+                });
+            });
+        }
+
+        function checkAnswer(e, element) {
+            const selected = element.getAttribute('data-answer');
+            const correct = element.getAttribute('data-correct');
+            const index = element.getAttribute('data-index');
+            const optionsDiv = element.parentElement;
+            const answerBox = document.querySelector(`.answer-box[data-index="${index}"]`);
+            
+            // Remove previous selection
+            optionsDiv.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+
+            // Show answer box
+            if (answerBox) {
+                answerBox.classList.add('show');
+                answerBox.classList.remove('hidden');
+
+                if (selected === correct) {
+                    answerBox.classList.remove('incorrect');
+                    answerBox.classList.add('correct');
+                    answerBox.innerHTML = `
+                        <div class="feedback-text">
+                            <span class="feedback-icon">✅</span> CORRECT!
+                        </div>
+                    `;
+                } else {
+                    answerBox.classList.remove('correct');
+                    answerBox.classList.add('incorrect');
+                    answerBox.innerHTML = `
+                        <div class="feedback-text">
+                            <span class="feedback-icon">❌</span> INCORRECT
+                        </div>
+                        <div class="correct-answer">Correct answer: <strong>${correct}</strong></div>
+                    `;
+                }
+            }
+        }
+
+        function toggleAnswer(btn, index) {
+            const answerBox = document.querySelector(`.answer-box[data-index="${index}"]`);
+            if (answerBox) {
+                answerBox.classList.toggle('show');
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('classFilter').value = '';
+            document.getElementById('topicFilter').value = '';
+            document.getElementById('searchBox').value = '';
+            filterQuestions();
+        }
+
+        window.onload = init;
+    </script>
 </body>
 </html>
